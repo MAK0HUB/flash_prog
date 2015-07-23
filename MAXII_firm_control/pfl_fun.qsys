@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system name="$${FILENAME}">
+ <component
+   name="$${FILENAME}"
+   displayName="$${FILENAME}"
+   version="1.0"
+   description=""
+   tags="INTERNAL_COMPONENT=true"
+   categories="System" />
+ <parameter name="bonusData"><![CDATA[bonusData 
+{
+   element $${FILENAME}
+   {
+   }
+   element parallel_flash_loader_0
+   {
+      datum _sortIndex
+      {
+         value = "0";
+         type = "int";
+      }
+   }
+}
+]]></parameter>
+ <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
+ <parameter name="device" value="EPM2210GF256C3" />
+ <parameter name="deviceFamily" value="MAX II" />
+ <parameter name="deviceSpeedGrade" value="3" />
+ <parameter name="fabricMode" value="QSYS" />
+ <parameter name="generateLegacySim" value="false" />
+ <parameter name="generationId" value="0" />
+ <parameter name="globalResetBus" value="false" />
+ <parameter name="hdlLanguage" value="VERILOG" />
+ <parameter name="hideFromIPCatalog" value="true" />
+ <parameter name="maxAdditionalLatency" value="1" />
+ <parameter name="projectName" value="max2_c4gx.qpf" />
+ <parameter name="sopcBorderPoints" value="false" />
+ <parameter name="systemHash" value="0" />
+ <parameter name="testBenchDutName" value="" />
+ <parameter name="timeStamp" value="0" />
+ <parameter name="useTestBenchNamingPattern" value="false" />
+ <instanceScript></instanceScript>
+ <interface
+   name="pfl_nreset"
+   internal="parallel_flash_loader_0.pfl_nreset"
+   type="conduit"
+   dir="end">
+  <port name="pfl_nreset" internal="pfl_nreset" />
+ </interface>
+ <interface
+   name="pfl_flash_access_granted"
+   internal="parallel_flash_loader_0.pfl_flash_access_granted"
+   type="conduit"
+   dir="end">
+  <port name="pfl_flash_access_granted" internal="pfl_flash_access_granted" />
+ </interface>
+ <interface
+   name="pfl_flash_access_request"
+   internal="parallel_flash_loader_0.pfl_flash_access_request"
+   type="conduit"
+   dir="end">
+  <port name="pfl_flash_access_request" internal="pfl_flash_access_request" />
+ </interface>
+ <interface
+   name="flash_addr"
+   internal="parallel_flash_loader_0.flash_addr"
+   type="conduit"
+   dir="end">
+  <port name="flash_addr" internal="flash_addr" />
+ </interface>
+ <interface
+   name="flash_data"
+   internal="parallel_flash_loader_0.flash_data"
+   type="conduit"
+   dir="end">
+  <port name="flash_data" internal="flash_data" />
+ </interface>
+ <interface
+   name="flash_nce"
+   internal="parallel_flash_loader_0.flash_nce"
+   type="conduit"
+   dir="end">
+  <port name="flash_nce" internal="flash_nce" />
+ </interface>
+ <interface
+   name="flash_nwe"
+   internal="parallel_flash_loader_0.flash_nwe"
+   type="conduit"
+   dir="end">
+  <port name="flash_nwe" internal="flash_nwe" />
+ </interface>
+ <interface
+   name="flash_noe"
+   internal="parallel_flash_loader_0.flash_noe"
+   type="conduit"
+   dir="end">
+  <port name="flash_noe" internal="flash_noe" />
+ </interface>
+ <interface
+   name="pfl_clk"
+   internal="parallel_flash_loader_0.pfl_clk"
+   type="conduit"
+   dir="end">
+  <port name="pfl_clk" internal="pfl_clk" />
+ </interface>
+ <interface
+   name="fpga_pgm"
+   internal="parallel_flash_loader_0.fpga_pgm"
+   type="conduit"
+   dir="end">
+  <port name="fpga_pgm" internal="fpga_pgm" />
+ </interface>
+ <interface
+   name="fpga_conf_done"
+   internal="parallel_flash_loader_0.fpga_conf_done"
+   type="conduit"
+   dir="end">
+  <port name="fpga_conf_done" internal="fpga_conf_done" />
+ </interface>
+ <interface
+   name="fpga_nstatus"
+   internal="parallel_flash_loader_0.fpga_nstatus"
+   type="conduit"
+   dir="end">
+  <port name="fpga_nstatus" internal="fpga_nstatus" />
+ </interface>
+ <interface
+   name="fpga_data"
+   internal="parallel_flash_loader_0.fpga_data"
+   type="conduit"
+   dir="end">
+  <port name="fpga_data" internal="fpga_data" />
+ </interface>
+ <interface
+   name="fpga_dclk"
+   internal="parallel_flash_loader_0.fpga_dclk"
+   type="conduit"
+   dir="end">
+  <port name="fpga_dclk" internal="fpga_dclk" />
+ </interface>
+ <interface
+   name="fpga_nconfig"
+   internal="parallel_flash_loader_0.fpga_nconfig"
+   type="conduit"
+   dir="end">
+  <port name="fpga_nconfig" internal="fpga_nconfig" />
+ </interface>
+ <interface
+   name="pfl_nreconfigure"
+   internal="parallel_flash_loader_0.pfl_nreconfigure"
+   type="conduit"
+   dir="end">
+  <port name="pfl_nreconfigure" internal="pfl_nreconfigure" />
+ </interface>
+ <interface
+   name="pfl_reset_watchdog"
+   internal="parallel_flash_loader_0.pfl_reset_watchdog" />
+ <interface
+   name="pfl_watchdog_error"
+   internal="parallel_flash_loader_0.pfl_watchdog_error" />
+ <interface
+   name="flash_nreset"
+   internal="parallel_flash_loader_0.flash_nreset"
+   type="conduit"
+   dir="end">
+  <port name="flash_nreset" internal="flash_nreset" />
+ </interface>
+ <module
+   kind="altera_parallel_flash_loader"
+   version="14.0"
+   enabled="1"
+   name="parallel_flash_loader_0"
+   autoexport="1">
+  <parameter name="INTENDED_DEVICE_FAMILY" value="MAX II" />
+  <parameter name="operating_mode_combo">Flash Programming and FPGA Configuration</parameter>
+  <parameter name="flash_type_combo" value="CFI Parallel Flash" />
+  <parameter name="TRISTATE_CHECKBOX" value="true" />
+  <parameter name="num_flash_combo" value="1" />
+  <parameter name="flash_device_combo" value="CFI 512 Mbit" />
+  <parameter name="flash_data_width_combo" value="16 bits" />
+  <parameter name="flash_nreset_check" value="true" />
+  <parameter name="num_qflash_combo" value="4" />
+  <parameter name="qflash_size_combo" value="EPCQ 16 Mbit" />
+  <parameter name="qflash_mfc_combo" value="Macronix" />
+  <parameter name="QFLASH_FAST_SPEED" value="false" />
+  <parameter name="qspi_size_combo" value="QSPI 8 Mbit" />
+  <parameter name="num_nflash_combo" value="1" />
+  <parameter name="nflash_mfc_combo" value="Micron(NAND)" />
+  <parameter name="nflash_device_combo" value="NAND 512 Mbit" />
+  <parameter name="nflash_data_width_combo" value="8 bits" />
+  <parameter name="nflash_rb_edit" value="0" />
+  <parameter name="FLASH_ECC_CHECKBOX" value="false" />
+  <parameter name="enhanced_flash_programming_combo" value="Speed" />
+  <parameter name="fifo_size_combo" value="16" />
+  <parameter name="disable_crc_check" value="true" />
+  <parameter name="clock_frequency" value="100.0" />
+  <parameter name="flash_access_time" value="100" />
+  <parameter name="nflash_access_time" value="100" />
+  <parameter name="option_bit_address" value="98304" />
+  <parameter name="fpga_conf_scheme_combo">FPP (fast passive parallel)</parameter>
+  <parameter name="safe_mode_combo" value="Halt" />
+  <parameter name="safe_mode_revert_edit" value="131072" />
+  <parameter name="reconfigure_checkbox" value="true" />
+  <parameter name="rsu_watchdog_checkbox" value="false" />
+  <parameter name="rsu_watchdog_counter_edit" value="200.0" />
+  <parameter name="dclk_divisor_combo" value="1" />
+  <parameter name="read_modes_combo" value="Normal Mode" />
+  <parameter name="decompressor_combo" value="None" />
+ </module>
+ <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
+ <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
+</system>
