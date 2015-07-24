@@ -6,10 +6,10 @@ input  wire          clk              ,
 //------------------------------------------
 output wire          fc_flash_advn    ,
 output wire	         fc_flash_cen     ,
-output wire	         fc_flash_clk     ,
+//output wire	         fc_flash_clk     ,
 output wire	         fc_flash_oen     ,
 //input  wire	         fc_flash_rdybsyn ,
-output wire	         fc_flash_resetn  ,
+//output wire	         fc_flash_resetn  ,
 output wire	         fc_flash_wen     ,
 inout  wire  [15:0]	fc_fsm_d         ,
 output wire	 [25:1]  fc_fsm_a         ,
@@ -20,14 +20,15 @@ output wire	 [25:1]  fc_fsm_a         ,
 //output wire          fc_wrfull        ,
 //input  wire          fc_rdclk         ,
 //-----------  leds  ---------------------
-output wire	 [7:0]   fc_user_led      ,  
+//output wire	 [7:0]   fc_user_led      ,  
 //---------- reconf  --------------------
 output wire	         wr_done      
 
 );
 
 	
-assign fc_user_led[7:0] = firm_N  [15:8];
+//assign fc_user_led[7:0] = firm_N  [15:8];
+
 
 //assign fc_user_led[7:0] = {state[4:0],3'b111};
 //assign fc_user_led[7:0] = {5'b10101,3'b111};
@@ -41,23 +42,29 @@ assign fc_user_led[7:0] = firm_N  [15:8];
 //assign fc_user_led[7:0] = {7'bzzzzzzz,start_cfg};
 //assign fc_user_led[7:0] = {7'bzzzzzzz,empty_flag };
 
-assign	fc_flash_clk     = 1'b0    ;
-assign   fc_flash_resetn  = 1'b1    ;
-assign   reconf_fpga      = reconf  ;
+//assign	fc_flash_clk     = 1'b0    ;
+//assign   fc_flash_resetn  = 1'b1    ;
+//assign   reconf_fpga      = reconf  ;
+
 
 // ---------------------  flash initial  ------------------------------
-reg   flash_flag = 1'b0;
+//reg   flash_flag = 1'b0;
 //assign   flash_flag = fc_flash_contr ;
+
+
+assign   fc_flash_cen    = (fc_flash_contr  )? 1'bz :sig_ce   ; 
+assign   fc_flash_oen    = (fc_flash_contr )? 1'bz :sig_oe    ;
+assign   fc_flash_wen    = (fc_flash_contr  )? 1'bz :sig_we   ;
+//assign   fc_flash_advn   = (fc_flash_contr )? 1'b1 :sig_adv   ;
+
+//assign   fc_fsm_d        = (fc_flash_contr  )? 16'hzzzz :data     ;
+assign   fc_fsm_a        = (fc_flash_contr )? 25'hzzzzzzz :addr   ;
+
+
+
+
+
 /*
-assign   fc_flash_cen    = (flash_flag )? sig_ce   : 1'bz ; 
-assign   fc_flash_oen    = (flash_flag )? sig_oe   : 1'bz ;
-assign   fc_flash_wen    = (flash_flag )? sig_we   : 1'bz ;
-assign   fc_flash_advn   = (flash_flag )? sig_adv  : 1'bz ;
-
-assign   fc_fsm_d        = (flash_flag )? data     : 16'hzzzz   ;
-assign   fc_fsm_a        = (flash_flag )? addr     : 25'hzzzzzzz;
-*/
-
 assign   fc_flash_cen    = sig_ce ; 
 assign   fc_flash_oen    = sig_oe ;
 assign   fc_flash_wen    = sig_we ;
@@ -65,7 +72,9 @@ assign   fc_flash_advn   = sig_adv ;
 
 assign   fc_fsm_d        = data;
 assign   fc_fsm_a        = addr;
+*/
 
+//assign   fc_fsm_d        = (fc_flash_contr  )? 16'hzzzz :data     ;
 
 reg [15:0] data        = 16'hZZZZ    ;
 reg [15:0] read_data   = 16'hZZZZ    ;
@@ -158,7 +167,7 @@ always @(posedge fc_rdclk)
 if ((empty) && (!start_flag)) empty_flag <= 1'b0;
 */
 
-
+/*
 always @(posedge clk)
 begin	
   
@@ -170,7 +179,8 @@ case (state)
 							//flag_unl     <= 0         ;
 						   //	read_data    <= 16'hZZZZ ; 
 						
-			            data         <= 16'hZZZZ    ;
+			             data         <= 16'hZZZZ    ;
+							 addr         <= 25'hZZZZZZZ ;
 							//firm_N       <= 16'hZZZZ    ; 
                      sig_ce       <= 1'bZ        ; 
                      sig_oe       <= 1'bZ        ; 
@@ -201,7 +211,7 @@ case (state)
 							reconf      <= 1'b1     ;
 						 end
 				*/	
-					
+					/*
 				    end	// IDLE
 
 		READ_TAB: begin
@@ -215,12 +225,12 @@ case (state)
 					     3'b011: begin  firm_N    <= fc_fsm_d    ;                         end	// tabl <= firm_N [15:10];   fc_fsm_d  fc_fsm_d
 			           3'b111: begin  sig_ce    <= 1'b1        ;
 						                 sig_oe    <= 1'b1        ;
-											  state     <= END         ;
+											  state     <= UNLOCK_TAB  ;
 											  
-											  if (firm_N [15:10]  == 6'b110110) 
+											  if (firm_N [15:10]  == 6'b111110) 
 											            wr_tabl <= {6'b111000,10'b0000000000};
 											  else 
-												         wr_tabl <= {6'b111110,10'b0000000000};
+												         wr_tabl <= {6'b100110,10'b0000000000};
 					
 							             // if (firm_N [15:10]  == 6'b110000) 
 											       // begin
@@ -240,7 +250,7 @@ case (state)
 															 wr_tabl <= {6'b101010,10'b0000000000};
 													  end
 											*/
-											
+	/*										
 							       end  // 3'b111
 						  endcase
             cnt <= cnt + 1'b1;						  
@@ -388,6 +398,8 @@ case (state)
 						endcase	
                   cnt <= cnt + 1'b1;							
      			      end //CLEAR_SR_WR_TAB		
+*/				
+						
 /*		
 		UNLOCK : begin
 			         case (cnt)
@@ -560,10 +572,10 @@ case (state)
 						endcase
                   cnt <= cnt + 1'b1;	
 					   end //WRITE_ER_2 
-*/
+
 	    END : begin 
 		           state   <= END         ;
-					  /*
+					  
 					  flash_flag   <= 1'b0   ;	
 					  data    <= 16'hZZZZ    ;
                  addr    <= 25'hZZZZZZZ ;  //E60000
@@ -571,11 +583,11 @@ case (state)
                  sig_oe  <= 1'bZ; 
                  sig_we  <= 1'bZ; 
                  sig_adv <= 1'bZ; 
-					  */
+					  
 					  
 				 end
 	
     endcase 	 
  end
-
+*/
 endmodule

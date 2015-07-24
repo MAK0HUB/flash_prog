@@ -67,9 +67,9 @@ inout wire	smb_data
 wire pfl_flash_access_granted_ins;
 wire pfl_flash_access_request_ins;
 wire [2:0]  fpga_pgm_ins;
-
+reg   pfl_flash_access = 1'b1 ;
 assign   pfl_flash_access_granted_ins = pfl_flash_access;
-reg   pfl_flash_access = 1'b1;
+
 
 assign	flash_clk = 1'b0;
 //assign	flash_resetn = 1'b1;
@@ -130,35 +130,10 @@ assign front_edge = ~prev_signal & fpga_conf_done;
 
 
 parameter [5:0] IDLE         = 6'b000001,
-                UNLOCK       = 6'b000010, 
-				    UNLOCK_2     = 6'b000011,
-		          ERASE        = 6'b000100,
-					 ERASE_2      = 6'b000101,
-					 READ_SR_ER   = 6'b000110,
-					 READ_TAB     = 6'b000111,
-					 CLEAR_SR_ER  = 6'b001000, 
-	             WRITE		  = 6'b001001,	 
-					 WRITE_2		  = 6'b001010,
-					 READ_SR_WR   = 6'b001011,
-				READ_SR_WR_TAB   = 6'b001100,  
-					 FROM_Z  	  = 6'b001101,    
-				READ_SR_ER_TAB   = 6'b001110,
-				CLEAR_SR_ER_TAB  = 6'b001111,	 
-					 WRITE_SR_WR  = 6'b010000,
-					 UNLOCK_TABLE = 6'b010001,
-					 CLEAR_SR_WR  = 6'b010010,
-					 WRITE_ER     = 6'b010011, 
-					 WRITE_ER_2   = 6'b010100,
-					 UNLOCK_TAB   = 6'b010101, 
-				    UNLOCK_2_TAB = 6'b010110,
-					 ERASE_TAB    = 6'b010111,
-					 ERASE_2_TAB  = 6'b011000,
-					 WRITE_TAB	  = 6'b011001,
-					 WRITE_2_TAB  = 6'b011010,
-				CLEAR_SR_WR_TAB  = 6'b011011,
-				    CONFIG       = 6'b011100,
-					 TO_Z         = 6'b011110,
+                FST_CFG      = 6'b000010,
+				    FST_IDLE     = 6'b000011,
 					 
+		         
 					 INITE        = 6'b011111,
 					 UNLOCK_PFL   = 6'b100000, 
 				    UNLOCK_2_PFL = 6'b100001,
@@ -180,26 +155,31 @@ parameter [5:0] IDLE         = 6'b000001,
 					  CFG_DN      = 6'b110001,
 					  WAIT_CFG    = 6'b110010;
 					  
-/*
 
-assign   flash_cen    = (!pfl_flash_access )? sig_ce   : flash_cen  ; 
-assign   flash_oen    = (!pfl_flash_access )? sig_oe   : 1'bz ;
-assign   flash_wen    = (!pfl_flash_access )? sig_we   : 1'bz ;
-assign   flash_advn   = (!pfl_flash_access )? sig_adv  : 1'bz ;
 
-assign   fsm_d        = (!pfl_flash_access )? data     : 16'hzzzz   ;
-assign   fsm_a        = (!pfl_flash_access )? addr     : 25'hzzzzzzz;
-*/
 
-/*
-assign   flash_cen    = sig_ce; 
-assign   flash_oen    = sig_oe;
-assign   flash_wen    = sig_we;
-assign   flash_advn   = sig_adv;
 
-assign   fsm_d        = data;
-assign   fsm_a        = addr;
-*/
+assign   flash_cen    = (pfl_flash_access )? pfl_cen  : fl_cen  ; 
+assign   flash_oen    = (pfl_flash_access )? pfl_oen  : fl_oen  ;
+assign   flash_wen    = (pfl_flash_access )? pfl_wen  : fl_wen  ;
+//assign   flash_advn   = (pfl_flash_access )? 1'b1   :   fl_advn ;
+//assign   fsm_d        = (pfl_flash_access )? data     : 16'hzzzz   ;
+assign   fsm_a        = (pfl_flash_access )? pfl_addr    : fl_addr;
+
+
+
+wire   fl_cen  ,pfl_cen  ; 
+wire   fl_oen  ,pfl_oen  ;
+wire   fl_wen  ,pfl_wen  ;
+wire   fl_advn ,pfl_advn ;
+wire [15:0 ]   fl_data;  
+wire [25:1 ]   fl_addr , pfl_addr; 
+
+
+
+//assign   fsm_d        = data;
+//ssign   fsm_a        = addr;
+
 
 reg [15:0] data        = 16'hZZZZ    ;
 reg [15:0] read_data   = 16'hZZZZ    ;
@@ -213,7 +193,7 @@ reg  sig_adv   = 1'bz;
 
 //-------------------------------------------------------------
 reg [2:0  ]   cnt      = 3'b000       ;				
-reg [5:0  ]   state    = IDLE         ;
+reg [5:0  ]   state    = FST_IDLE     ;
 reg [23:0 ]   kol      = 24'h000000   ;	
 reg [25:1 ]   adrcnt                  ;  //= 25'h0010000 
 reg [1:0  ]   pos      = 2'b00        ;
@@ -235,42 +215,60 @@ reg [23:0]    cnt_cfg                 ;
 reg [27:0]    cnt_wt                 ;
 //assign  tabl =  firm_N [15:9 ]      ;
 
-//-------------------------------------------------------------
+//------------------------------------------------------------
+
+//reg first_reconf <= 1'b0 ;
+
+
+
 
 always @( posedge clkin_max_100)
 begin
 //if (!sys_resetn) state <= IDLE; 
 case (state)  
 
-		 IDLE   : begin
-	            /*	 
-							flag_unl     <= 0           ;
-							//-------------------------------
-			            data         <= 16'hZZZZ    ;
-                     read_data    <= 16'hZZZZ    ; 
-                     sig_ce       <= 1'bz        ; 
-                     sig_oe       <= 1'bz        ; 
-                     sig_we       <= 1'bz        ; 
-                     sig_adv      <= 1'bz        ; 
-							addr         <= 25'hZZZZZZZ ; 
-							//-------------------------------
-							cnt          <= 3'b000      ;
-							kol_2        <= 3'b000      ;
-						   kol          <= 24'h000000  ;
-						   rdreq        <= 1'b0        ;	
-							reg_max_csn  <= 1'b1        ;
-					      dat_oe       <= 1'b1        ;
-							//----------------------------------
-					*/		
+       FST_IDLE : begin
+			            pfl_flash_access <= 1'b0  ;
+							flag <= 2'b01             ;
+					      state <=  FST_CFG ;		
+						
+					     // pfl_flash_access <= 1'b0  ;
 					      start_cfg <= 1'b1         ;
 							rst_pfl   <= 1'b1         ;
 					      cnt_rst   <= 24'h000000   ;
 							cnt_cfg   <= 24'h000000   ;
-							cnt_wt    <= 28'h0000000 ;
-						   if (!max_csn) state <= PAGE  ;		 // max_csn 
+							cnt_wt    <= 28'h0000000  ;
+     			    end //START_CFG
+					 
+					 
+		  FST_CFG  : begin
+			            pfl_flash_access <= 1'b1  ;
+							//flag <= 2'b01             ;
+					      state <= IDLE  ;		
+						
+					     // pfl_flash_access <= 1'b0  ;
+					      start_cfg <= 1'b0         ;
+							rst_pfl   <= 1'b1         ;
+					      cnt_rst   <= 24'h000000   ;
+							cnt_cfg   <= 24'h000000   ;
+							cnt_wt    <= 28'h0000000  ;
+						
+						
+     			    end //START_CFG
+					 
+					 
+		 IDLE   : begin
+					      pfl_flash_access <= 1'b1  ;
+					      start_cfg <= 1'b1         ;
+							rst_pfl   <= 1'b1         ;
+					      cnt_rst   <= 24'h000000   ;
+							cnt_cfg   <= 24'h000000   ;
+							cnt_wt    <= 28'h0000000  ;
+							//flag      <= 2'b00        ;
+							if (!max_csn) state <= PAGE  ;
 				     end	// IDLE
-					  
 			PAGE : begin
+			       pfl_flash_access <= 1'b1  ;
 			              if (flag == 2'b10) 
 							     flag <=2'b00;
 	                    else
@@ -279,6 +277,7 @@ case (state)
      			    end //CNT_RES 
 					 
 			CNT_CFG : begin
+			             //pfl_flash_access <= 1'b1  ;
 			             if (cnt_cfg == 24'hFFFFFF)
 							   begin
 								state <= CNT_RST     ;
@@ -325,14 +324,15 @@ case (state)
 								 end  
 			             else 
 							    begin
-	                        flag <= flag - 1'b1;
+								 flag <= 2'b00;
+	                      //  flag <= flag - 1'b1;
 					            state <= CNT_CFG ;	
 								 end 			
      			        end //CNT_RES 
 	   endcase 	 
  end				  
-					  
-		
+				  
+	/*	
 							
 			pfl_fun pfl_fun_conf_fpga (
 		.pfl_nreset               (rst_pfl ),                   // pfl_nreset.pfl_nreset  sys_resetn start_cfg front_edge
@@ -358,21 +358,50 @@ case (state)
 		.flash_nreset             (flash_resetn) 
 	);
 	
-	/*
+	*/
+	
+								
+			pfl_fun pfl_fun_conf_fpga (
+		.pfl_nreset               (rst_pfl ),                   // pfl_nreset.pfl_nreset  sys_resetn start_cfg front_edge
+		.pfl_flash_access_granted (pfl_flash_access_granted_ins), // pfl_flash_access_granted.pfl_flash_access_granted
+		.pfl_flash_access_request (pfl_flash_access_request_ins), // pfl_flash_access_request.pfl_flash_access_request
+		.flash_addr               (pfl_addr),                        // flash_addr.flash_addr
+		.flash_data               (fsm_d),                        // flash_data.flash_data
+		.flash_nce                (pfl_cen),                    // flash_nce.flash_nce
+		.flash_nwe                (pfl_wen),                    // flash_nwe.flash_nwe
+		.flash_noe                (pfl_oen),                    // flash_noe.flash_noe
+		.pfl_clk                  (clkin_max_100),                // pfl_clk.pfl_clk
+		.fpga_pgm                 (fpga_pgm_ins ),                // fpga_pgm.fpga_pgm
+		.fpga_conf_done           (fpga_conf_done),               // fpga_conf_done.fpga_conf_done
+		.fpga_nstatus             (fpga_statusn),                 // fpga_nstatus.fpga_nstatus
+		.fpga_data                (fpga_data),                    // fpga_data.fpga_data
+		.fpga_dclk                (fpga_dclk),                    // fpga_dclk.fpga_dclk
+		.fpga_nconfig             (fpga_confign),                 // fpga_nconfig.fpga_nconfig
+		//.pfl_nreconfigure         (start_cfg),                  // pfl_nreconfigure.pfl_nreconfigure
+		//.pfl_nreconfigure         (load),                       // pfl_nreconfigure.pfl_nreconfigure
+	   .pfl_nreconfigure         (start_cfg ),                     // pfl_nreconfigure.pfl_nreconfigure
+		//.pfl_reset_watchdog       (load),                             // pfl_reset_watchdog.pfl_reset_watchdog
+		//.pfl_watchdog_error       (reconf),                       // pfl_watchdog_error.pfl_watchdog_error
+		.flash_nreset             (flash_resetn) 
+	);
+	
+	
+	
 		flash_control_MM cpld_flash_cont (
 //--------------- flash --------------------
   .fc_flash_contr      ( pfl_flash_access   ),
   .clk                 ( clkin_50      ),
 //---------------------------------------------  
-  .fc_flash_advn       ( flash_advn    ),
-  .fc_flash_cen        ( flash_cen     ),
+  .fc_flash_advn       (flash_advn   ), //  
+  .fc_flash_cen        ( fl_cen     ),
   // .fc_flash_clk        ( flash_clk     ),
-  .fc_flash_oen        ( flash_oen     ),
+
+  .fc_flash_oen        ( fl_oen     ),
  // .fc_flash_rdybsyn    ( flash_rdybsyn ),
  // .fc_flash_resetn     ( flash_resetn  ),
-  .fc_flash_wen        ( flash_wen     ),
-  .fc_fsm_d            ( fsm_d         ),
-  .fc_fsm_a            ( fsm_a         ),
+  .fc_flash_wen        ( fl_wen          ),
+  .fc_fsm_d            ( fsm_d           ),
+  .fc_fsm_a            ( fl_addr         ),
   
 //--------------- fifo  --------------------
  //  .fc_fifo_in          ( fifo_in       ),  
@@ -386,5 +415,5 @@ case (state)
   .wr_done             ( oper_compl    ) 
   );
   
-	*/
+	
 	endmodule
