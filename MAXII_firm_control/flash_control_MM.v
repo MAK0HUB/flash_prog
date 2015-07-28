@@ -2,11 +2,12 @@ module flash_control_MM (
 
 //------------   flash  -------------------
 input  wire          fc_flash_contr   ,
+input  wire          fc_req           ,
 input  wire          clk              ,
 //------------------------------------------
 output wire          fc_flash_advn    ,
 output wire	         fc_flash_cen     ,
-//output wire	         fc_flash_clk     ,
+output wire	         fc_flash_clk     ,
 output wire	         fc_flash_oen     ,
 //input  wire	         fc_flash_rdybsyn ,
 //output wire	         fc_flash_resetn  ,
@@ -20,9 +21,10 @@ output wire	 [25:1]  fc_fsm_a         ,
 //output wire          fc_wrfull        ,
 //input  wire          fc_rdclk         ,
 //-----------  leds  ---------------------
-//output wire	 [7:0]   fc_user_led      ,  
+output wire	 [7:0]   fc_user_led      ,  
 //---------- reconf  --------------------
-output wire	         wr_done      
+output wire	         wr_done          ,  
+output wire	 [1:0]   pfl_str            
 
 );
 
@@ -30,7 +32,9 @@ output wire	         wr_done
 //assign fc_user_led[7:0] = firm_N  [15:8];
 
 
-//assign fc_user_led[7:0] = {state[4:0],3'b111};
+assign fc_user_led[7:0] = {state[4:0],3'b111};
+
+
 //assign fc_user_led[7:0] = {5'b10101,3'b111};
 //assign fc_user_led[7:0] = tabl;
 //assign fc_user_led[7:0] = mem[1] [7:0];
@@ -51,18 +55,38 @@ output wire	         wr_done
 //reg   flash_flag = 1'b0;
 //assign   flash_flag = fc_flash_contr ;
 
-
+/*
 assign   fc_flash_cen    = (fc_flash_contr  )? 1'bz :sig_ce   ; 
 assign   fc_flash_oen    = (fc_flash_contr )? 1'bz :sig_oe    ;
 assign   fc_flash_wen    = (fc_flash_contr  )? 1'bz :sig_we   ;
 //assign   fc_flash_advn   = (fc_flash_contr )? 1'b1 :sig_adv   ;
-
 //assign   fc_fsm_d        = (fc_flash_contr  )? 16'hzzzz :data     ;
 assign   fc_fsm_a        = (fc_flash_contr )? 25'hzzzzzzz :addr   ;
+*/
+
+assign   fc_flash_cen    = (fc_flash_contr )? 1'bz :sig_ce  ; 
+assign   fc_flash_oen    = (fc_flash_contr )? 1'bz :sig_oe  ;
+assign   fc_flash_wen    = (fc_flash_contr )? 1'bz :sig_we  ;
+//assign   fc_flash_advn   = (fc_flash_contr )? 1'bz :sig_adv ;
+assign   fc_fsm_d        = (fc_flash_contr )? 16'hzzzz    :data ;
+assign   fc_fsm_a        = (fc_flash_contr )? 25'hzzzzzzz :addr ;
 
 
+assign	fc_flash_clk = 1'b0;
+assign   fc_flash_advn = sig_adv;
+  
+assign  wr_done = wr_done_reg;
+reg  wr_done_reg = 1'b0;
 
+wire flash_flag;
+assign flash_flag = flash_flag_reg;
+reg  flash_flag_reg  = 1'b1;
 
+assign  pfl_str = pfl_str_reg;
+reg [1:0] pfl_str_reg;
+
+//assign   fc_flash_advn   = sig_adv ;
+//assign   fc_fsm_d        = data;
 
 /*
 assign   fc_flash_cen    = sig_ce ; 
@@ -129,7 +153,7 @@ reg [7:0  ]   mem [0:31]              ;
 reg           rd_flg  = 1'b0          ;
 reg           cnt_flg = 1'b0          ;
 
-reg [15:0 ]   firm_N = 16'h1243       ;
+reg [15:0 ]   firm_N = 16'hzzzz      ;
 reg [5:0 ]    tabl                    ;
 reg [15:0 ]   wr_tabl                 ;
 //assign  tabl =  firm_N [15:9 ]      ;
@@ -167,7 +191,7 @@ always @(posedge fc_rdclk)
 if ((empty) && (!start_flag)) empty_flag <= 1'b0;
 */
 
-/*
+
 always @(posedge clk)
 begin	
   
@@ -179,24 +203,24 @@ case (state)
 							//flag_unl     <= 0         ;
 						   //	read_data    <= 16'hZZZZ ; 
 						
-			             data         <= 16'hZZZZ    ;
-							 addr         <= 25'hZZZZZZZ ;
-							//firm_N       <= 16'hZZZZ    ; 
-                     sig_ce       <= 1'bZ        ; 
-                     sig_oe       <= 1'bZ        ; 
-                     sig_we       <= 1'bZ        ; 
-                     sig_adv      <= 1'bZ        ; 
+			            data         <= 16'hZZZZ    ;
+							addr         <= 25'hZZZZZZZ ;
+							firm_N       <= 16'hZZZZ    ; 
+                     sig_ce       <= 1'bz        ; 
+                     sig_oe       <= 1'bz        ; 
+                     sig_we       <= 1'bz        ; 
+                     sig_adv      <= 1'bz        ; 
 							
 							cnt          <= 3'b000      ;
 							kol_2        <= 5'b00000    ;
 						   kol          <= 24'h000000  ;
 							
-							state        <= READ_TAB    ;
-							wr_1         <= 1'b1        ;
-							flash_flag   <= 1'b1        ;	
+							
+							if (!fc_req) state <=  READ_TAB;
+						   wr_done_reg <= 1'b0;	
 							
 			   // wr_tabl <= {6'b100000,10'b0000000000} ;
-				// if (!empty) state <=  READ_TAB        ; //UNLOCK_TAB
+				      // if (!fc_flash_contr) state <=  READ_TAB        ; //UNLOCK_TAB
 					  
 				/*  
 					   if (!start_flag)
@@ -211,7 +235,7 @@ case (state)
 							reconf      <= 1'b1     ;
 						 end
 				*/	
-					/*
+					
 				    end	// IDLE
 
 		READ_TAB: begin
@@ -225,12 +249,22 @@ case (state)
 					     3'b011: begin  firm_N    <= fc_fsm_d    ;                         end	// tabl <= firm_N [15:10];   fc_fsm_d  fc_fsm_d
 			           3'b111: begin  sig_ce    <= 1'b1        ;
 						                 sig_oe    <= 1'b1        ;
-											  state     <= UNLOCK_TAB  ;
+											  state     <= END  ;
 											  
-											  if (firm_N [15:10]  == 6'b111110) 
-											            wr_tabl <= {6'b111000,10'b0000000000};
+											  if (firm_N [15:10] == 6'b111111) 
+											     begin
+											            wr_tabl <= {6'b100000,10'b0000000000};
+															pfl_str_reg <= 2'b00;
+															wr_done_reg <= 1'b1;	
+												  end
 											  else 
+											     begin
 												         wr_tabl <= {6'b100110,10'b0000000000};
+														   pfl_str_reg <= 2'b01;
+														   wr_done_reg <= 1'b1;	
+											     end
+											  
+											  
 					
 							             // if (firm_N [15:10]  == 6'b110000) 
 											       // begin
@@ -250,7 +284,7 @@ case (state)
 															 wr_tabl <= {6'b101010,10'b0000000000};
 													  end
 											*/
-	/*										
+										
 							       end  // 3'b111
 						  endcase
             cnt <= cnt + 1'b1;						  
@@ -299,7 +333,10 @@ case (state)
 			           3'b001: begin  sig_adv   <= 1'b0  ;  sig_ce  <= 1'b0;     end 
 			           3'b010: begin  sig_adv   <= 1'b1  ;  sig_we  <= 1'b0;     end	
 					     3'b011: begin  data <= 16'hzzD0   ;                       end	
-                    3'b111: begin  sig_ce <= 1'b1     ;  sig_we    <= 1'b1 ; state <= READ_SR_ER_TAB ; data <= 16'hzzzz;   end    //dat_oe <= 1'b0;      				  
+                    3'b111: begin  sig_ce <= 1'b1     ;  sig_we    <= 1'b1 ; 
+						 // state <= READ_SR_ER_TAB ;
+						 wr_done_reg <=1'b1;
+						  data <= 16'hzzzz;   end    //dat_oe <= 1'b0;      				  
 						endcase
                 cnt <= cnt + 1'b1;							
      			    end //ERASE_2_TAB
@@ -357,7 +394,7 @@ case (state)
 						  3'b011: begin  data     <= wr_tabl   ;   end	//data     <= fifo_out  wr_tabl
 			           3'b111: begin  sig_ce   <= 1'b1      ;
 						                 sig_we   <= 1'b1      ; 
-										     state    <= READ_SR_WR_TAB;
+										     state    <=READ_SR_WR_TAB ;
 											  data     <= 16'hzzzz      ;
 									 end // 3'b111 
 							endcase
@@ -378,7 +415,8 @@ case (state)
 											      if ((read_data [5] == 1'b1) || (read_data [4] == 1'b1)) state <= CLEAR_SR_WR_TAB ; 
 												   else 
 													   begin
-												   	  state  <= END;	
+												   	  //state  <= END;
+														  wr_done_reg <=1'b1;
 														  wr_1   <=1'b0; 
 												      end		
 									       end
@@ -398,185 +436,11 @@ case (state)
 						endcase	
                   cnt <= cnt + 1'b1;							
      			      end //CLEAR_SR_WR_TAB		
-*/				
-						
-/*		
-		UNLOCK : begin
-			         case (cnt)
-					     //----------------------------- wr 60 h -----------------------------//
-			           3'b000: begin  addr      <= adrcnt;  sig_adv    <= 1'b1;     end		
-			           3'b001: begin  sig_adv   <= 1'b0  ;  sig_ce     <= 1'b0;     end 
-			           3'b010: begin  sig_adv   <= 1'b1  ;  sig_we     <= 1'b0;     end	
-					     3'b011: begin  data <= 16'hzz60   ;                          end	
-			           3'b111: begin  sig_ce    <= 1'b1  ;  sig_we    <= 1'b1 ; state <= UNLOCK_2; end         
-						endcase
-            cnt <= cnt + 1'b1;							
-     			end //UNLOCK
-				
-		UNLOCK_2 : begin
-		            case (cnt)
-					     //----------------------------- wr D0 h  -----------------------------//
-			           3'b000: begin  addr      <= adrcnt;  sig_adv    <= 1'b1;     end		
-			           3'b001: begin  sig_adv   <= 1'b0  ;  sig_ce     <= 1'b0;     end 
-			           3'b010: begin  sig_adv   <= 1'b1  ;  sig_we     <= 1'b0;     end	
-					     3'b011: begin  data <= 16'hzzD0   ;                          end	
-						  3'b111: begin  sig_ce    <= 1'b1  ;  sig_we    <= 1'b1 ; state <= ERASE;      end 	  
-						endcase	
-            cnt <= cnt + 1'b1;							
-     			end //UNLOCK_2
-			
-		ERASE : begin
-		            case (cnt)
-					     //----------------------------- wr 20 h -----------------------------//
-			           3'b000: begin  addr      <= adrcnt;  sig_adv    <= 1'b1;     end		
-			           3'b001: begin  sig_adv   <= 1'b0  ;  sig_ce     <= 1'b0;     end 
-			           3'b010: begin  sig_adv   <= 1'b1  ;  sig_we     <= 1'b0;     end	
-					     3'b011: begin  data <= 16'hzz20   ;                          end	
-			           3'b111: begin  sig_ce    <= 1'b1  ;  sig_we    <= 1'b1 ; state <= ERASE_2; end         
-						endcase	
-              cnt <= cnt + 1'b1;							
-     			  end //ERASE
-				
-		ERASE_2 : begin   
-			         case (cnt)
-					     //----------------------------- wr D0 h -----------------------------//
-			           3'b000: begin  addr      <= adrcnt;  sig_adv <= 1'b1;     end		
-			           3'b001: begin  sig_adv   <= 1'b0  ;  sig_ce  <= 1'b0;     end 
-			           3'b010: begin  sig_adv   <= 1'b1  ;  sig_we  <= 1'b0;     end	
-					     3'b011: begin  data <= 16'hzzD0   ;                       end	
-                    3'b111: begin  sig_ce <= 1'b1  ;  sig_we    <= 1'b1 ; state <= READ_SR_ER ; data <= 16'hzzzz;   end    //dat_oe <= 1'b0;      				  
-						endcase
-                cnt <= cnt + 1'b1;							
-     			    end //ERASE_2
-					 	  
-	   READ_SR_ER :  begin
-		              case (cnt)
-						  3'b000: begin  addr      <= adrcnt;       sig_adv    <= 1'b1  ;    end		
-			           3'b001: begin  sig_adv   <= 1'b0  ;       sig_ce     <= 1'b0  ;    end 
-			           3'b010: begin  sig_adv   <= 1'b1  ;       sig_oe     <= 1'b0  ;    end	//dat_oe <= 1'b1;  dat_oe <= 1'b0; 
-					     3'b110: begin  read_data <= fc_fsm_d ;                                end	
-			           3'b111: begin  
-					                sig_ce    <= 1'b1      ; 
-					                sig_oe    <= 1'b1      ; 
-										 if (read_data [7] == 1'b1)
-										    begin
-											      if ((read_data [5] == 1'b1) || (read_data [4] == 1'b1)) state <=  CLEAR_SR_ER  ; 
-													else state <=  WRITE ;			
-											 end
-								end  // 3'b111
-				       endcase
-                   cnt <= cnt + 1'b1;	
-	                end //READ_SR_ER
-					
-	  CLEAR_SR_ER : begin
-			          case (cnt)
-					     //----------------------------- wr 50 h  -----------------------------//
-			           3'b000: begin  addr      <= adrcnt;  sig_adv    <= 1'b1;     end		
-			           3'b001: begin  sig_adv   <= 1'b0  ;  sig_ce     <= 1'b0;     end 
-			           3'b010: begin  sig_adv   <= 1'b1  ;  sig_we     <= 1'b0;     end	
-					     3'b011: begin  data <= 16'hzz50   ;                          end	  
-					     3'b111: begin  sig_ce    <= 1'b1  ;  sig_we    <= 1'b1 ; state <= UNLOCK; end  //state <=  WRITE;       				  
-						endcase	
-                  cnt <= cnt + 1'b1;							
-     			      end //CLEAR_SR 
-		
-		WRITE:  if (!empty ) 
-		          begin
-			           case (cnt)
-		              //----------------------------- wr 40 h  --------------------------//
-	                 3'b000: begin  addr     <= adrcnt ; sig_adv  <= 1'b1;  end		
-			           3'b001: begin  sig_adv  <= 1'b0   ; sig_ce   <= 1'b0;  end 
-			           3'b010: begin  sig_adv  <= 1'b1   ; sig_we   <= 1'b0;  end	  
-						  3'b011: begin  data <= 16'hzz40   ;                    end	
-						  3'b111: begin  sig_ce   <= 1'b1   ; sig_we   <= 1'b1; state <= WRITE_2 ; end   // 3'b111
-						endcase
-               cnt <= cnt + 1'b1;	
-			      end //WRITE
-				   else if (kol == 24'h25C96C) state <= IDLE ;
-					
-		WRITE_2:	 begin
-			            case (cnt)	
-						 //----------------------------- wr  h  --------------------------//
-					     3'b000: begin  addr     <= adrcnt ; sig_adv  <= 1'b1                  ;  end  
-			           3'b001: begin  sig_adv  <= 1'b0   ; sig_ce   <= 1'b0;  rdreq <= 1'b1  ;  end  
-			           3'b010: begin  sig_adv  <= 1'b1   ; sig_we   <= 1'b0;  rdreq <= 1'b0  ;  end  
-						  3'b011: begin  data     <= fifo_out      ; err_data <= fifo_out       ;  end	//data     <= fifo_out 
-			           3'b111: begin  sig_ce   <= 1'b1          ;
-						                 sig_we   <= 1'b1          ; 
-										     adrcnt   <= adrcnt + 1'b1 ;
-											  kol      <= kol + 1'b1    ; 
-										     state    <= READ_SR_WR    ;
-											  data     <= 16'hzzzz      ;
-									 end // 3'b111 
-							endcase
-                cnt <= cnt + 1'b1;	
-					 end //WRITE_2 
-	   
-	  READ_SR_WR : begin
-	               case (cnt)
-						  3'b000: begin  addr      <= adrcnt;       sig_adv    <= 1'b1  ;    end		
-			           3'b001: begin  sig_adv   <= 1'b0  ;       sig_ce     <= 1'b0  ;    end 
-			           3'b010: begin  sig_adv   <= 1'b1  ;       sig_oe     <= 1'b0  ;    end	 
-					     3'b110: begin  read_data <= fc_fsm_d ;                                end	
-			           3'b111: begin  
-					                sig_ce    <= 1'b1      ; 
-					                sig_oe    <= 1'b1      ; 
-										 if (read_data [7] == 1'b1)
-										    begin
-											      if ((read_data [5] == 1'b1) || (read_data [4] == 1'b1)) state <= CLEAR_SR_WR; 
-												   else if ((adrcnt % 25'h0010000) == 1'b0)                state <= UNLOCK     ;
-										         else  state  <= WRITE         ;			
-									       end
-								    end  // 3'b111	
-				      endcase
-                  cnt <= cnt + 1'b1;	
-	               end //READ_SR_WR
-	
-	  CLEAR_SR_WR : begin
-			          case (cnt)
-					     //----------------------------- wr 50 h   -----------------------------//
-			           3'b000: begin  addr      <= adrcnt;  sig_adv    <= 1'b1;     end		
-			           3'b001: begin  sig_adv   <= 1'b0  ;  sig_ce     <= 1'b0;     end 
-			           3'b010: begin  sig_adv   <= 1'b1  ;  sig_we     <= 1'b0;     end	
-					     3'b110: begin  data      <= 16'hzz50 ;                       end	  
-					     3'b111: begin  sig_ce    <= 1'b1  ;  sig_we    <= 1'b1 ; state <= WRITE_ER; end         				  
-						endcase	
-                  cnt <= cnt + 1'b1;							
-     			      end //CLEAR_SR_WR		
-						
-	  WRITE_ER:    begin
-			         case (cnt)
-		              //----------------------------- wr 40 h  --------------------------//
-	                 3'b000: begin  addr     <= adrcnt - 1'b1 ; sig_adv  <= 1'b1;  end		
-			           3'b001: begin  sig_adv  <= 1'b0          ; sig_ce   <= 1'b0;  end 
-			           3'b010: begin  sig_adv  <= 1'b1          ; sig_we   <= 1'b0;  end	  
-						  3'b011: begin  data <= 16'hzz40          ;                    end	
-						  3'b111: begin  sig_ce   <= 1'b1          ; sig_we   <= 1'b1; state <= WRITE_ER_2 ; end   // 3'b111
-						endcase
-                  cnt <= cnt + 1'b1;	
-			         end //WRITE_ER
-				
-	  WRITE_ER_2: begin
-			        case (cnt)	
-						 //----------------------------- wr  h  --------------------------//
-					     3'b000: begin  addr     <= adrcnt        ; sig_adv  <= 1'b1;  end  
-			           3'b001: begin  sig_adv  <= 1'b0          ; sig_ce   <= 1'b0;  end  
-			           3'b010: begin  sig_adv  <= 1'b1          ; sig_we   <= 1'b0;  end  
-						  3'b011: begin  data     <= err_data      ;                    end	
-			           3'b111: begin  sig_ce   <= 1'b1          ;
-						                 sig_we   <= 1'b1          ; 
-										     adrcnt   <= adrcnt + 1'b1 ; 
-										     state    <= READ_SR_WR    ;
-											  data     <= 16'hzzzz      ;
-									 end // 3'b111 
-						endcase
-                  cnt <= cnt + 1'b1;	
-					   end //WRITE_ER_2 
-
 	    END : begin 
 		           state   <= END         ;
 					  
-					  flash_flag   <= 1'b0   ;	
+					  //flash_flag_reg   <= 1'b1   ;	
+					  
 					  data    <= 16'hZZZZ    ;
                  addr    <= 25'hZZZZZZZ ;  //E60000
                  sig_ce  <= 1'bZ; 
@@ -584,10 +448,8 @@ case (state)
                  sig_we  <= 1'bZ; 
                  sig_adv <= 1'bZ; 
 					  
-					  
 				 end
 	
     endcase 	 
  end
-*/
 endmodule
