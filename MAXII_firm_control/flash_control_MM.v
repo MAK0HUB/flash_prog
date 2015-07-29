@@ -29,10 +29,10 @@ output wire	 [1:0]   pfl_str
 );
 
 	
-//assign fc_user_led[7:0] = firm_N  [15:8];
+assign fc_user_led[7:0] = firm_N  [15:8];
 
 
-assign fc_user_led[7:0] = {state[4:0],3'b111};
+//assign fc_user_led[7:0] = {state[4:0],3'b111};
 
 
 //assign fc_user_led[7:0] = {5'b10101,3'b111};
@@ -64,16 +64,20 @@ assign   fc_flash_wen    = (fc_flash_contr  )? 1'bz :sig_we   ;
 assign   fc_fsm_a        = (fc_flash_contr )? 25'hzzzzzzz :addr   ;
 */
 
+
+/*
 assign   fc_flash_cen    = (fc_flash_contr )? 1'bz :sig_ce  ; 
 assign   fc_flash_oen    = (fc_flash_contr )? 1'bz :sig_oe  ;
 assign   fc_flash_wen    = (fc_flash_contr )? 1'bz :sig_we  ;
 //assign   fc_flash_advn   = (fc_flash_contr )? 1'bz :sig_adv ;
 assign   fc_fsm_d        = (fc_flash_contr )? 16'hzzzz    :data ;
 assign   fc_fsm_a        = (fc_flash_contr )? 25'hzzzzzzz :addr ;
+*/
 
 
-assign	fc_flash_clk = 1'b0;
-assign   fc_flash_advn = sig_adv;
+
+
+
   
 assign  wr_done = wr_done_reg;
 reg  wr_done_reg = 1'b0;
@@ -85,30 +89,28 @@ reg  flash_flag_reg  = 1'b1;
 assign  pfl_str = pfl_str_reg;
 reg [1:0] pfl_str_reg;
 
-//assign   fc_flash_advn   = sig_adv ;
-//assign   fc_fsm_d        = data;
+assign	fc_flash_clk = 1'b0;
+assign   fc_flash_advn = sig_adv;
 
-/*
-assign   fc_flash_cen    = sig_ce ; 
-assign   fc_flash_oen    = sig_oe ;
-assign   fc_flash_wen    = sig_we ;
-assign   fc_flash_advn   = sig_adv ;
 
-assign   fc_fsm_d        = data;
-assign   fc_fsm_a        = addr;
-*/
 
-//assign   fc_fsm_d        = (fc_flash_contr  )? 16'hzzzz :data     ;
+//-----------------------------------------------
+
+assign   fc_flash_cen    = sig_ce  ; 
+assign   fc_flash_oen    = sig_oe  ;
+assign   fc_flash_wen    = sig_we  ;
+assign   fc_fsm_d        = data ;
+assign   fc_fsm_a        = addr ;
 
 reg [15:0] data        = 16'hZZZZ    ;
 reg [15:0] read_data   = 16'hZZZZ    ;
 reg [15:0] err_data    = 16'hZZZZ    ;
-reg [25:1] addr        = 25'hZZZZZZZ ;  //E60000
+reg [25:1] addr        = 25'hZZZZZZZ ;  
 
 reg  sig_ce    = 1'bz; 
 reg  sig_oe    = 1'bz; 
 reg  sig_we    = 1'bz; 
-reg  sig_adv   = 1'bz; 
+reg  sig_adv   = 1'b1; 
 
 // --------------------------------------------------------------------
 parameter [4:0] IDLE         = 5'b00001,
@@ -215,13 +217,12 @@ case (state)
 							kol_2        <= 5'b00000    ;
 						   kol          <= 24'h000000  ;
 							
-							
 							if (!fc_req) state <=  READ_TAB;
 						   wr_done_reg <= 1'b0;	
+							//state <=  READ_TAB;
 							
 			   // wr_tabl <= {6'b100000,10'b0000000000} ;
-				      // if (!fc_flash_contr) state <=  READ_TAB        ; //UNLOCK_TAB
-					  
+				      // if (!fc_flash_contr) state <=  READ_TAB        ; //UNLOCK_TAB 
 				/*  
 					   if (!start_flag)
 					      begin
@@ -235,7 +236,6 @@ case (state)
 							reconf      <= 1'b1     ;
 						 end
 				*/	
-					
 				    end	// IDLE
 
 		READ_TAB: begin
@@ -246,26 +246,24 @@ case (state)
 			           3'b000: begin  addr      <= ADDR_TABL   ; sig_adv    <= 1'b1   ;  end		
 			           3'b001: begin  sig_adv   <= 1'b0        ; sig_ce     <= 1'b0   ;  end 
 			           3'b010: begin  sig_adv   <= 1'b1        ; sig_oe     <= 1'b0   ;  end	//dat_oe <= 1'b1;  dat_oe <= 1'b0; 
-					     3'b011: begin  firm_N    <= fc_fsm_d    ;                         end	// tabl <= firm_N [15:10];   fc_fsm_d  fc_fsm_d
+					     3'b110: begin  firm_N    <= fc_fsm_d    ;                         end	// tabl <= firm_N [15:10];   fc_fsm_d  fc_fsm_d
 			           3'b111: begin  sig_ce    <= 1'b1        ;
 						                 sig_oe    <= 1'b1        ;
 											  state     <= END  ;
 											  
-											  if (firm_N [15:10] == 6'b111111) 
+											  if (firm_N [15:10] == 6'b100010) 
 											     begin
-											            wr_tabl <= {6'b100000,10'b0000000000};
-															pfl_str_reg <= 2'b00;
+											            wr_tabl <= {6'b100010,10'b0000000000};
+															pfl_str_reg <= 2'b01;
 															wr_done_reg <= 1'b1;	
 												  end
 											  else 
 											     begin
 												         wr_tabl <= {6'b100110,10'b0000000000};
-														   pfl_str_reg <= 2'b01;
+														   pfl_str_reg <= 2'b00;
 														   wr_done_reg <= 1'b1;	
 											     end
 											  
-											  
-					
 							             // if (firm_N [15:10]  == 6'b110000) 
 											       // begin
 															// adrcnt  <= ADDR_FIRM_1;
