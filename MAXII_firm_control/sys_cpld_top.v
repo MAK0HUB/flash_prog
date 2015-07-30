@@ -246,11 +246,16 @@ case (state)
 				     end	// IDLE
 					  
 			PAGE : begin
+			            if ((flag == 2'b00 ) || (flag == 2'b10  )) flag <= 2'b01;
+							else if (flag == 2'b01) flag <= 2'b10;
+							 state <= CFG        ;
+							/*
 			            pfl_flash_access <= 1'b0   ;
 			            fl_req_reg       <= 1'b0   ;
 							flag <= pfl_str            ;
 							if ( oper_compl)
-			      				 state <= CFG        ;				 
+			      				 state <= CFG        ;
+					*/				 
      			    end //PAGE 
 					 
 			CFG:  begin
@@ -290,7 +295,7 @@ case (state)
 			 WAIT_CFG :  begin
 			             if (cnt_wt == 28'hFFFFFFF)
 						       begin
-								   state   <= CFG_DN   ;  
+								   state   <= IDLE   ;  // CFG_DN 
 									cnt_wt <= 28'h0000000 ;
 								 end  
 			             else 
@@ -303,14 +308,18 @@ case (state)
 			             if (fpga_conf_done == 1'b1)
 						       begin
 								   state <= IDLE   ;  
-								 end  
+								 end
+							 
 			             else 
+							 
 							    begin
-								 flag <= 2'b00;
+								 flag <= 2'b01;
 	                      //  flag <= flag - 1'b1;
 					            state <= CNT_CFG ;	
-								 end 			
-     			        end //CFG_DN 		
+								 end 	
+							
+     			        end //CFG_DN 	
+						 
 	   endcase 	 
  end				  
 

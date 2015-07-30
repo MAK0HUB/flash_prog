@@ -249,21 +249,34 @@ case (state)
 					     3'b110: begin  firm_N    <= fc_fsm_d    ;                         end	// tabl <= firm_N [15:10];   fc_fsm_d  fc_fsm_d
 			           3'b111: begin  sig_ce    <= 1'b1        ;
 						                 sig_oe    <= 1'b1        ;
-											  state     <= END  ;
+											  state     <= IDLE ;
 											  
-											  if (firm_N [15:10] == 6'b100010) 
+											  if ((firm_N [15:10] == 6'b100010) || (firm_N [15:10] == 6'b101101))
 											     begin
-											            wr_tabl <= {6'b100010,10'b0000000000};
+											           // wr_tabl <= {6'b100010,10'b0000000000};
 															pfl_str_reg <= 2'b01;
 															wr_done_reg <= 1'b1;	
 												  end
-											  else 
+											  else if (firm_N [15:10] == 6'b101010)
 											     begin
-												         wr_tabl <= {6'b100110,10'b0000000000};
-														   pfl_str_reg <= 2'b00;
+												        // wr_tabl <= {6'b101010,10'b0000000000};
+														   pfl_str_reg <= 2'b10;
 														   wr_done_reg <= 1'b1;	
 											     end
-											  
+											else if (firm_N [15:10] == 6'b1111111)
+											     begin
+												        // wr_tabl <= {6'b101010,10'b0000000000};
+														   pfl_str_reg <= 2'b01;
+														   wr_done_reg <= 1'b1;	
+											     end
+												  /*
+											 else if (firm_N [15:10] == 6'b101101)
+											     begin
+												        // wr_tabl <= {6'b101010,10'b0000000000};
+														   pfl_str_reg <= 2'b01;
+														   wr_done_reg <= 1'b1;	
+											     end
+											  */
 							             // if (firm_N [15:10]  == 6'b110000) 
 											       // begin
 															// adrcnt  <= ADDR_FIRM_1;
@@ -435,7 +448,7 @@ case (state)
                   cnt <= cnt + 1'b1;							
      			      end //CLEAR_SR_WR_TAB		
 	    END : begin 
-		           state   <= END         ;
+		           state   <= IDLE         ;
 					  
 					  //flash_flag_reg   <= 1'b1   ;	
 					  
