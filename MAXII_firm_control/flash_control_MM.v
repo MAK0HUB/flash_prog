@@ -99,7 +99,7 @@ assign   fc_flash_advn = sig_adv;
 assign   fc_flash_cen    = sig_ce  ; 
 assign   fc_flash_oen    = sig_oe  ;
 assign   fc_flash_wen    = sig_we  ;
-assign   fc_fsm_d        = data ;
+//assign   fc_fsm_d        = data ;
 assign   fc_fsm_a        = addr ;
 
 reg [15:0] data        = 16'hZZZZ    ;
@@ -205,7 +205,7 @@ case (state)
 							//flag_unl     <= 0         ;
 						   //	read_data    <= 16'hZZZZ ; 
 						
-			            data         <= 16'hZZZZ    ;
+			            //data         <= 16'hZZZZ    ;
 							addr         <= 25'hZZZZZZZ ;
 							firm_N       <= 16'hZZZZ    ; 
                      sig_ce       <= 1'bz        ; 
@@ -220,27 +220,23 @@ case (state)
 							if (!fc_req) state <=  READ_TAB;
 						   wr_done_reg <= 1'b0;	
 							//state <=  READ_TAB;
-							
-			   // wr_tabl <= {6'b100000,10'b0000000000} ;
-				      // if (!fc_flash_contr) state <=  READ_TAB        ; //UNLOCK_TAB 
-				/*  
-					   if (!start_flag)
-					      begin
-							kol_2  <= kol_2 +1'b1   ;
-							reconf <= 1'b0          ;
-							end
-						if (kol_2 == 5'b11111)
-						 begin
-						   start_flag  <= 1'b1     ;
-							kol_2       <= 5'b00000 ;
-							reconf      <= 1'b1     ;
-						 end
-				*/	
+						
 				    end	// IDLE
-
+		/*			 
+	 WRITE_TAB:   
+		          begin
+			           case (cnt)
+		              //----------------------------- wr 40 h  --------------------------//
+	                 3'b000: begin  addr     <= ADDR_TABL; sig_adv  <= 1'b1;  end		
+			           3'b001: begin  sig_adv  <= 1'b0   ;   sig_ce   <= 1'b0;  end 
+			           3'b010: begin  sig_adv  <= 1'b1   ;   sig_we   <= 1'b0;  end	  
+						  3'b011: begin  data <= 16'hzzFF   ;                    end	
+						  3'b111: begin  sig_ce   <= 1'b1   ;   sig_we   <= 1'b1; state <= READ_TAB ; end   // 3'b111
+						endcase
+               cnt <= cnt + 1'b1;	
+			      end //WRITE_TAB
+*/
 		READ_TAB: begin
-		        //  start_flag   <= 1'b0;
-					// flash_flag   <= 1'b1; 
 			           case (cnt)
 					     //----------------------------- rd  -----------------------------//
 			           3'b000: begin  addr      <= ADDR_TABL   ; sig_adv    <= 1'b1   ;  end		
@@ -251,22 +247,22 @@ case (state)
 						                 sig_oe    <= 1'b1        ;
 											  state     <= IDLE ;
 											  
-											  if ((firm_N [15:10] == 6'b100010) || (firm_N [15:10] == 6'b101101))
+											  if ((firm_N [15:10] == 6'b100101) || (firm_N [15:10] == 6'b101100))
 											     begin
 											           // wr_tabl <= {6'b100010,10'b0000000000};
 															pfl_str_reg <= 2'b01;
 															wr_done_reg <= 1'b1;	
 												  end
-											  else if (firm_N [15:10] == 6'b101010)
+											  else if (firm_N [15:10] == 6'b110110)
 											     begin
 												        // wr_tabl <= {6'b101010,10'b0000000000};
 														   pfl_str_reg <= 2'b10;
 														   wr_done_reg <= 1'b1;	
 											     end
-											else if (firm_N [15:10] == 6'b1111111)
+											else if (firm_N [15:10] == 6'b111111)
 											     begin
 												        // wr_tabl <= {6'b101010,10'b0000000000};
-														   pfl_str_reg <= 2'b01;
+														   pfl_str_reg <= 2'b00;
 														   wr_done_reg <= 1'b1;	
 											     end
 												  /*
@@ -451,8 +447,8 @@ case (state)
 		           state   <= IDLE         ;
 					  
 					  //flash_flag_reg   <= 1'b1   ;	
-					  
-					  data    <= 16'hZZZZ    ;
+					  firm_N       <= 16'hZZZZ    ;
+					  //data    <= 16'hZZZZ    ;
                  addr    <= 25'hZZZZZZZ ;  //E60000
                  sig_ce  <= 1'bZ; 
                  sig_oe  <= 1'bZ; 

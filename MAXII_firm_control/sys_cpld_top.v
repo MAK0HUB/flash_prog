@@ -171,7 +171,8 @@ parameter [5:0] IDLE         = 6'b000001,
 					  PAGE        = 6'b110000,
 					  CFG_DN      = 6'b110001,
 					  WAIT_CFG    = 6'b110010,
-					  CFG         = 6'b110011;
+					  CFG         = 6'b110011,
+					  PAGE_2      = 6'b110100;
 					  
 assign   flash_cen    = (pfl_flash_access_granted_ins )? pfl_cen  : fl_cen  ; 
 assign   flash_oen    = (pfl_flash_access_granted_ins )? pfl_oen  : fl_oen  ;
@@ -215,7 +216,7 @@ begin
 //if (!sys_resetn) state <= IDLE; 
 case (state)  
 
-       FST_IDLE : begin
+        FST_IDLE : begin
 			             pfl_flash_access <= 1'b1  ;
 							 fl_req_reg       <= 1'b1  ;
 							 if ( fpga_conf_done )  
@@ -295,7 +296,7 @@ case (state)
 			 WAIT_CFG :  begin
 			             if (cnt_wt == 28'hFFFFFFF)
 						       begin
-								   state   <= IDLE   ;  // CFG_DN 
+								   state   <=  IDLE  ;  // CFG_DN 
 									cnt_wt <= 28'h0000000 ;
 								 end  
 			             else 
@@ -320,38 +321,9 @@ case (state)
 							
      			        end //CFG_DN 	
 						 
+						 
 	   endcase 	 
  end				  
-
-	
-
-/*							
-			pfl_fun pfl_fun_conf_fpga (
-		.pfl_nreset               (rst_pfl ),                   // pfl_nreset.pfl_nreset  sys_resetn start_cfg front_edge rst_pfl 
-		.pfl_flash_access_granted (pfl_flash_access_granted_ins), // pfl_flash_access_granted.pfl_flash_access_granted
-		.pfl_flash_access_request (pfl_flash_access_request_ins), // pfl_flash_access_request.pfl_flash_access_request
-		.flash_addr               (fsm_a),                        // flash_addr.flash_addr
-		.flash_data               (fsm_d),                        // flash_data.flash_data
-		.flash_nce                (flash_cen),                    // flash_nce.flash_nce
-		.flash_nwe                (flash_wen),                    // flash_nwe.flash_nwe
-		.flash_noe                (flash_oen),                    // flash_noe.flash_noe
-		.pfl_clk                  (clkin_max_100),                // pfl_clk.pfl_clk
-		.fpga_pgm                 (fpga_pgm_ins ),                // fpga_pgm.fpga_pgm
-		.fpga_conf_done           (fpga_conf_done),               // fpga_conf_done.fpga_conf_done
-		.fpga_nstatus             (fpga_statusn),                 // fpga_nstatus.fpga_nstatus
-		.fpga_data                (fpga_data),                    // fpga_data.fpga_data
-		.fpga_dclk                (fpga_dclk),                    // fpga_dclk.fpga_dclk
-		.fpga_nconfig             (fpga_confign),                 // fpga_nconfig.fpga_nconfig
-		//.pfl_nreconfigure         (start_cfg),                  // pfl_nreconfigure.pfl_nreconfigure
-		//.pfl_nreconfigure         (load),                       // pfl_nreconfigure.pfl_nreconfigure
-	   .pfl_nreconfigure         (start_cfg ),                     // pfl_nreconfigure.pfl_nreconfigure  start_cfg
-		//.pfl_reset_watchdog       (load),                             // pfl_reset_watchdog.pfl_reset_watchdog
-		//.pfl_watchdog_error       (reconf),                       // pfl_watchdog_error.pfl_watchdog_error
-		.flash_nreset             (flash_resetn) 
-	);
-*/
-
-	
 
 							
 			pfl_fun pfl_fun_conf_fpga (
