@@ -310,7 +310,6 @@ case (state)
 						       begin
 								   state <= IDLE   ;  
 								 end
-							 
 			             else 
 							 
 							    begin

@@ -198,7 +198,7 @@
   <parameter name="nflash_access_time" value="100" />
   <parameter name="option_bit_address" value="98304" />
   <parameter name="fpga_conf_scheme_combo">FPP (fast passive parallel)</parameter>
-  <parameter name="safe_mode_combo" value="Halt" />
+  <parameter name="safe_mode_combo">Retry from fixed address</parameter>
   <parameter name="safe_mode_revert_edit" value="131072" />
   <parameter name="reconfigure_checkbox" value="true" />
   <parameter name="rsu_watchdog_checkbox" value="false" />
