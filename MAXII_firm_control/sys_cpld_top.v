@@ -69,7 +69,8 @@ wire pfl_flash_access_request_ins;
 
 wire [2:0]  fpga_pgm_ins;
 assign fpga_pgm_ins	= {1'b0,flag};
-reg [1:0] flag = 2'b00 ; // 
+reg [1:0] flag   = 2'b00 ; 
+reg [1:0] p_flag = 2'b00 ; 
 
 wire pfl_flash_access_granted_ins;
 assign   pfl_flash_access_granted_ins = pfl_flash_access;
@@ -84,13 +85,14 @@ assign   msel_0 = 1'bZ;
 assign   msel_1 = 1'bZ;
 assign   msel_2 = 1'bZ;
 
-
 //assign max_leds = {m_led , max_csn};
 //assign fpga_pgm_ins	= {3'b000};
-assign max_leds = {state[3:0]};
 //reg [2:0] m_led = 3'b011;
 
 //assign max_leds = {fpga_statusn,fpga_conf_done,fpga_confign,oper_compl};
+//assign max_leds = {state[3:0]};
+assign max_leds = {1'b0, !flag [0], !flag [1], state[0]};
+
 
 wire start_cfg ;
 assign  start_cfg = start_cfg_reg;
@@ -172,7 +174,8 @@ parameter [5:0] IDLE         = 6'b000001,
 					  CFG_DN      = 6'b110001,
 					  WAIT_CFG    = 6'b110010,
 					  CFG         = 6'b110011,
-					  PAGE_2      = 6'b110100;
+					  PAGE_2      = 6'b110100,
+					  FLAG        = 6'b110101;
 					  
 assign   flash_cen    = (pfl_flash_access_granted_ins )? pfl_cen  : fl_cen  ; 
 assign   flash_oen    = (pfl_flash_access_granted_ins )? pfl_oen  : fl_oen  ;
@@ -246,17 +249,24 @@ case (state)
 							if (!max_csn) state <= PAGE ;
 				     end	// IDLE
 					  
+			FLAG : begin 
+			            p_flag <= flag              ;	
+			            state  <= PAGE              ; 
+			       end 
+					 
 			PAGE : begin
 			            if ((flag == 2'b00 ) || (flag == 2'b10  )) flag <= 2'b01;
 							else if (flag == 2'b01) flag <= 2'b10;
-							 state <= CFG        ;
-							/*
-			            pfl_flash_access <= 1'b0   ;
-			            fl_req_reg       <= 1'b0   ;
-							flag <= pfl_str            ;
+							state   <= CFG              ;
+							
+					/*
+			            pfl_flash_access <= 1'b0    ;
+			            fl_req_reg       <= 1'b0    ;
+							flag <= pfl_str             ;
 							if ( oper_compl)
-			      				 state <= CFG        ;
-					*/				 
+			      				 state <= CFG         ;
+					*/	
+					
      			    end //PAGE 
 					 
 			CFG:  begin
@@ -296,7 +306,7 @@ case (state)
 			 WAIT_CFG :  begin
 			             if (cnt_wt == 28'hFFFFFFF)
 						       begin
-								   state   <=  IDLE  ;  // CFG_DN 
+								   state   <=  CFG_DN  ;  // CFG_DN 
 									cnt_wt <= 28'h0000000 ;
 								 end  
 			             else 
@@ -311,16 +321,21 @@ case (state)
 								   state <= IDLE   ;  
 								 end
 			             else 
-							 
 							    begin
-								 flag <= 2'b01;
-	                      //  flag <= flag - 1'b1;
-					            state <= CNT_CFG ;	
+								// flag <= 2'b01;
+	                     //   flag <= flag - 1'b1;
+								/*
+									if      (p_flag == 2'b10) flag <= 2'b01;
+							      else if (p_flag == 2'b01) flag <= 2'b10;
+									else if (p_flag == 2'b00) flag <= 2'b01;
+								*/
+							      flag  <= p_flag;	
+							      state <= CFG   ; 
+									
+					          // state <= CNT_CFG ;	
 								 end 	
 							
      			        end //CFG_DN 	
-						 
-						 
 	   endcase 	 
  end				  
 

@@ -265,33 +265,6 @@ case (state)
 														   pfl_str_reg <= 2'b00;
 														   wr_done_reg <= 1'b1;	
 											     end
-												  /*
-											 else if (firm_N [15:10] == 6'b101101)
-											     begin
-												        // wr_tabl <= {6'b101010,10'b0000000000};
-														   pfl_str_reg <= 2'b01;
-														   wr_done_reg <= 1'b1;	
-											     end
-											  */
-							             // if (firm_N [15:10]  == 6'b110000) 
-											       // begin
-															// adrcnt  <= ADDR_FIRM_1;
-															
-													//  end
-													  
-											/*		  
-										    else if (firm_N [15:10] == 6'b110000)  
-											        begin
-											             adrcnt <= ADDR_FIRM_2 ;
-															 wr_tabl <= {6'b110001,10'b0000000000};
-												     end
-											 else if (firm_N [15:10] == 6'b101010) // 6'b101000 
-											        begin
-											             adrcnt <= ADDR_FIRM_STOK ;
-															 wr_tabl <= {6'b101010,10'b0000000000};
-													  end
-											*/
-										
 							       end  // 3'b111
 						  endcase
             cnt <= cnt + 1'b1;						  
