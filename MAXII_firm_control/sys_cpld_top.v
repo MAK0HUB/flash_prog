@@ -90,8 +90,8 @@ assign   msel_2 = 1'bZ;
 //reg [2:0] m_led = 3'b011;
 
 //assign max_leds = {fpga_statusn,fpga_conf_done,fpga_confign,oper_compl};
-//assign max_leds = {state[3:0]};
-assign max_leds = {1'b0, !flag [0], !flag [1], state[0]};
+assign max_leds = {state[3:0]};
+//assign max_leds = {1'b0, !flag [0], !flag [1], state[0]};
 
 
 wire start_cfg ;
@@ -102,17 +102,25 @@ wire rst_pfl;
 assign  rst_pfl = rst_pfl_reg;
 reg rst_pfl_reg = 1'b1;
 
-wire fl_req ;
-assign  fl_req = fl_req_reg;
-reg fl_req_reg = 1'b1;
+wire fl_rd_req ;
+assign  fl_rd_req = fl_rd_req_reg;
+reg fl_rd_req_reg = 1'b1;
+
+wire fl_wr_req ;
+assign  fl_wr_req = fl_wr_req_reg;
+reg fl_wr_req_reg = 1'b1;
+
+wire [1:0] wr_page ;
+assign  wr_page = wr_page_reg;
+reg [1:0] wr_page_reg = 2'b00;
 
 reg  cnt_flag  = 1'b1;
 reg [3:0] cnt_res = 4'h0;
 reg  load_flag = 1'b1;
 
 wire [1:0]  pfl_str ;
-
-
+wire   rd_compl  ;
+wire   wr_compl ;
 
 /*
 	always@(posedge clkin_max_100)
@@ -175,7 +183,9 @@ parameter [5:0] IDLE         = 6'b000001,
 					  WAIT_CFG    = 6'b110010,
 					  CFG         = 6'b110011,
 					  PAGE_2      = 6'b110100,
-					  FLAG        = 6'b110101;
+					  FLAG        = 6'b110101,
+					  WR_TB       = 6'b110110,
+					  WAIT_WR     = 6'b110111;
 					  
 assign   flash_cen    = (pfl_flash_access_granted_ins )? pfl_cen  : fl_cen  ; 
 assign   flash_oen    = (pfl_flash_access_granted_ins )? pfl_oen  : fl_oen  ;
@@ -221,22 +231,23 @@ case (state)
 
         FST_IDLE : begin
 			             pfl_flash_access <= 1'b1  ;
-							 fl_req_reg       <= 1'b1  ;
+							 fl_rd_req_reg    <= 1'b1  ;
 							 if ( fpga_conf_done )  
 					       state <=   READ_FIRM      ;	
      			      end // FST_IDLE
 					 
-		 READ_FIRM: begin
+		  READ_FIRM: begin
 		                pfl_flash_access <= 1'b0  ;
-			             fl_req_reg       <= 1'b0  ;
+			             fl_rd_req_reg    <= 1'b0  ;
 							 flag <= pfl_str           ;
-							 if ( oper_compl)
+							 if ( rd_compl)
 			      				   state <= FST_CFG  ;		
-     			      end // READ_FIRM
+     			       end // READ_FIRM
 		 
 		  FST_CFG:  begin
 			            pfl_flash_access <= 1'b1   ;
-					      state <= CNT_CFG           ;		
+					      state <= CNT_CFG           ;	
+						   fl_rd_req_reg    <= 1'b1   ;	
      			      end // FST_CFG
 
 		  IDLE   : begin
@@ -246,7 +257,7 @@ case (state)
 					      cnt_rst   <= 24'h000000     ;
 							cnt_cfg   <= 24'h000000     ;
 							cnt_wt    <= 28'h0000000    ;
-							if (!max_csn) state <= PAGE ;
+							if (!max_csn) state <= FLAG ;
 				     end	// IDLE
 					  
 			FLAG : begin 
@@ -270,22 +281,23 @@ case (state)
      			    end //PAGE 
 					 
 			CFG:  begin
-			            pfl_flash_access <= 1'b1   ;
-					      state <= CNT_CFG           ;		
+			            pfl_flash_access <= 1'b1    ;
+					      state            <= CNT_CFG ;	
+						   fl_wr_req_reg    <= 1'b1    ;	
      			    end //CFG
 					 
 			CNT_CFG : begin
-			             pfl_flash_access <= 1'b1  ;
+			             pfl_flash_access <= 1'b1   ;
 			             if (cnt_cfg == 24'hFFFFFF)
 							   begin
-								state <= CNT_RST     ;
+								state <= CNT_RST         ;
 						      start_cfg_reg <= 1'b1    ;	
-							   cnt_cfg <= 24'h000000;	
+							   cnt_cfg <= 24'h000000    ;	
 								end
 			             else 
 							   begin
-							   cnt_cfg <= cnt_cfg +1'b1;
-				            start_cfg_reg <= 1'b0   ;
+							   cnt_cfg <= cnt_cfg +1'b1 ;
+				            start_cfg_reg <= 1'b0    ;
 				            end				
      			       end //CNT_CFG 
 					 
@@ -293,20 +305,20 @@ case (state)
 			             if (cnt_rst == 24'hFFFFFF)
 						       begin
 								   state   <= WAIT_CFG   ;  
-									rst_pfl_reg <= 1'b1       ;
+									rst_pfl_reg <= 1'b1   ;
 									cnt_rst <= 24'h000000 ;
 								 end  
 			             else 
 							    begin
 							      cnt_rst <= cnt_rst +1'b1;
-								   rst_pfl_reg   <= 1'b0       ;
+								   rst_pfl_reg   <= 1'b0   ;
 								  end 			
      			        end //CNT_RES 
 						  
 			 WAIT_CFG :  begin
 			             if (cnt_wt == 28'hFFFFFFF)
 						       begin
-								   state   <=  CFG_DN  ;  // CFG_DN 
+								   state   <=  CFG_DN    ;  
 									cnt_wt <= 28'h0000000 ;
 								 end  
 			             else 
@@ -320,22 +332,34 @@ case (state)
 						       begin
 								   state <= IDLE   ;  
 								 end
+								 
 			             else 
 							    begin
 								// flag <= 2'b01;
-	                     //   flag <= flag - 1'b1;
+	                     // flag <= flag - 1'b1;
 								/*
-									if      (p_flag == 2'b10) flag <= 2'b01;
-							      else if (p_flag == 2'b01) flag <= 2'b10;
-									else if (p_flag == 2'b00) flag <= 2'b01;
+									if      (flag == 2'b10) flag <= 2'b01;
+							      else if (flag == 2'b01) flag <= 2'b10;
+									else if (flag == 2'b00) flag <= 2'b01;
 								*/
-							      flag  <= p_flag;	
-							      state <= CFG   ; 
-									
-					          // state <= CNT_CFG ;	
-								 end 	
-							
+							      flag          <= p_flag ;	
+							      state         <= WR_TB    ; 
+								 end
+								 
+								 
      			        end //CFG_DN 	
+						  
+			 WR_TB : begin
+			           fl_wr_req_reg <= 1'b0        ;
+						  wr_page_reg   <= p_flag      ;
+			           state <= WAIT_WR ;
+						end
+						
+			 WAIT_WR : begin
+			           if ( wr_compl == 1'b1)	state <= CFG ;
+						 end
+		   	
+			 
 	   endcase 	 
  end				  
 
@@ -368,10 +392,11 @@ case (state)
 		flash_control_MM cpld_flash_cont (
 //--------------- flash --------------------
   .fc_flash_contr      ( pfl_flash_access  ),
-  .fc_req              ( fl_req            ),
+  .fc_rd_req           ( fl_rd_req         ),
+  .fc_wr_req           ( fl_wr_req         ),
   .clk                 ( clkin_50          ),
 //---------------------------------------------  
-  .fc_flash_advn       ( fl_advn              ),  // flash_advn   fl_advn 
+  .fc_flash_advn       ( fl_advn           ),  // flash_advn   fl_advn 
   .fc_flash_cen        ( fl_cen            ),
   .fc_flash_clk        ( flash_clk         ),
   .fc_flash_oen        ( fl_oen            ),
@@ -387,9 +412,11 @@ case (state)
  // .fc_wrfull           ( full          ), 
  // .fc_rdclk            ( clkin_50      ),  
  //------------   leds  --------------------
-  .fc_user_led         (  user_led        ), //      user_led 
+  .fc_user_led         (  user_led         ), //      user_led 
  //------------ reconf  --------------------
-  .wr_done             ( oper_compl        ),
+  .rd_done             ( rd_compl          ),
+  .wr_done             ( wr_compl          ),
+  .wr_page_str         ( wr_page           ),
   .pfl_str             ( pfl_str           ) 
   );
   
