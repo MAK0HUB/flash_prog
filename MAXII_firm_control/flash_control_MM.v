@@ -32,7 +32,7 @@ output wire	 [1:0]   pfl_str
 );
 
 	
-assign fc_user_led[7:0] = firm_N  [15:8];
+//assign fc_user_led[7:0] = firm_N  [15:8];
 
 
 //assign fc_user_led[7:0] = {state[4:0],3'b111};
@@ -103,11 +103,8 @@ assign   fc_flash_wen    = sig_we  ;
 assign   fc_fsm_d        = data ;
 assign   fc_fsm_a        = addr ;
 
-
-//reg [15:0] data        = 16'hZZZZ    ;
-
-
-reg [15:0] data ;
+reg [15:0] data        = 16'hZZZZ    ;
+//reg [15:0] data ;
 reg [15:0] read_data   = 16'hZZZZ    ;
 reg [15:0] err_data    = 16'hZZZZ    ;
 reg [25:1] addr        = 25'hZZZZZZZ ;  
@@ -120,7 +117,7 @@ reg  sig_adv   = 1'b1;
 // --------------------------------------------------------------------
 parameter [4:0] IDLE         = 5'b00001,
                 RESET        = 5'b00010, 
-				    UNLOCK_2     = 5'b00011,
+				  
 		          ERASE        = 5'b00100,
 					 ERASE_2      = 5'b00101,
 					 READ_SR_ER   = 5'b00110,
@@ -134,7 +131,7 @@ parameter [4:0] IDLE         = 5'b00001,
 				READ_SR_ER_TAB   = 5'b01110,
 				CLEAR_SR_ER_TAB  = 5'b01111,	 
 					 WRITE_SR_WR  = 5'b10000,
-					 UNLOCK_TABLE = 5'b10001,
+					
 					 CLEAR_SR_WR  = 5'b10010,
 					 WRITE_ER     = 5'b10011, 
 					 WRITE_ER_2   = 5'b10100,
@@ -214,13 +211,13 @@ case (state)
                      sig_oe       <= 1'bz        ; 
                      sig_we       <= 1'bz        ; 
                      sig_adv      <= 1'bz        ; 
-							
+							data         <= 16'hZZZZ    ; 
 							cnt          <= 3'b000      ;
 							kol_2        <= 5'b00000    ;
 						   kol          <= 17'b00000000000000000  ;
 							
-							if      (!fc_rd_req) state <=  READ_TAB;
-							else if (!fc_wr_req) state <=  WR_STR  ;
+							if (!fc_rd_req) state <=  READ_TAB;
+						   if (!fc_wr_req) state <=  WR_STR  ;
 						   rd_done_reg <= 1'b0;	
 							wr_done_reg <= 1'b0;
 													
@@ -327,9 +324,9 @@ case (state)
 			           3'b010: begin  sig_adv   <= 1'b1  ;  sig_we  <= 1'b0   ;  end	
 					     3'b011: begin  data   <= 16'hzzD0 ;                       end	
                     3'b111: begin  sig_ce <= 1'b1     ;  sig_we    <= 1'b1 ; 
-						                 state  <= RESET    ;
+						                 state  <= RESET   ;
 						 // state <= READ_SR_ER_TAB ;
-						  data  <= 16'hzzzz       ; 
+						 // data  <= 16'hzzzz       ; 
 						 // state       <= IDLE     ;
 					    // wr_done_reg <= 1'b1     ;  
 						end      				  
@@ -341,13 +338,14 @@ case (state)
 			             
                      if (kol == 17'b11111111111111111)
 							  begin
-							   state <= WRITE_TAB             ;
+							   state <= END            ;
 								kol   <= 17'b00000000000000000 ;
+								//wr_done_reg <= 1'b1    ; 
 							  end
 							else
 							  begin
 							   kol   <=  kol + 1'b1           ;
-							   state <= RESET                 ;
+							   //state <= RESET                 ;
 							  end
 			         end	
 						
@@ -408,6 +406,8 @@ case (state)
 			           3'b111: begin  sig_ce   <= 1'b1      ;
 						                 sig_we   <= 1'b1      ;
 											  state    <=END        ; 
+											 // state  <= IDLE;
+											 // wr_done_reg <=1'b1    ; 
 										   //  state    <=READ_SR_WR_TAB ;
 											//  data     <= 16'hzzzz      ;
 									 end // 3'b111 
@@ -452,9 +452,8 @@ case (state)
 	    END : begin 
 		           state       <= IDLE    ;
 					  wr_done_reg <= 1'b1    ;  
-					  //flash_flag_reg   <= 1'b1   ;	
-					  //firm_N       <= 16'hZZZZ    ;
-					  //data    <= 16'hZZZZ    ;
+					  firm_N       <= 16'hZZZZ    ;
+					  data    <= 16'hZZZZ    ;
                  addr    <= 25'hZZZZZZZ ;  //E60000
                  sig_ce  <= 1'bZ; 
                  sig_oe  <= 1'bZ; 
