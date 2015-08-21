@@ -66,9 +66,9 @@ inout wire	smb_data
 
 
 wire pfl_flash_access_request_ins;
-
 wire [2:0]  fpga_pgm_ins;
 assign fpga_pgm_ins	= {1'b0,flag};
+
 reg [1:0] flag   = 2'b00 ; 
 reg [1:0] p_flag = 2'b00 ; 
 
@@ -76,23 +76,23 @@ wire   pfl_flash_access_granted_ins;
 assign pfl_flash_access_granted_ins = pfl_flash_access;
 reg    pfl_flash_access = 1'b1 ;
 
-//assign	flash_clk = 1'b0;
+//assign	flash_clk    = 1'b0;
 //assign	flash_resetn = 1'b1;
-//assign	flash_advn = 1'b0;
+//assign	flash_advn   = 1'b0;
 
 assign	user_led  = 8'bZZZZZZZZ;
-assign   msel_0 = 1'bZ;
-assign   msel_1 = 1'bZ;
-assign   msel_2 = 1'bZ;
+assign   msel_0    = 1'bZ;
+assign   msel_1    = 1'bZ;
+assign   msel_2    = 1'bZ;
 
 //assign max_leds = {m_led , max_csn};
 //assign fpga_pgm_ins	= {3'b000};
 //reg [2:0] m_led = 3'b011;
 
 //assign max_leds = {fpga_statusn,fpga_conf_done,fpga_confign,oper_compl};
-//assign max_leds = {state[3:0]};
-assign max_leds = {1'b0, !flag [0], !flag [1], state[0]};
+//assign max_leds = {1'b0, !flag [0], !flag [1], state[0]};
 
+assign max_leds = {state[3:0]};
 
 wire start_cfg ;
 assign  start_cfg = start_cfg_reg;
@@ -144,9 +144,14 @@ begin
 
 	end
 */	
-	
-	
-	
+always@(posedge clkin_max_100)
+begin
+   if (!load)
+	        load_flag <= 1'b0; 
+	else
+	        load_flag <= 1'b1;
+end
+
 /*
 reg prev_signal;
 	always@(posedge clkin_max_100)
@@ -155,59 +160,47 @@ wire front_edge;
 assign front_edge = ~prev_signal & fpga_conf_done;
 */
 
-
-parameter [5:0] IDLE         = 6'b000001,
-                FST_CFG      = 6'b000010,
-				    FST_IDLE     = 6'b000011,
-					 READ_FIRM    = 6'b000100,
-					 FIRST        = 6'b000101,
-					 INITE        = 6'b011111,
-					 UNLOCK_PFL   = 6'b100000, 
-				    UNLOCK_2_PFL = 6'b100001,
-					 ERASE_PFL    = 6'b100010,
-					 ERASE_2_PFL  = 6'b100011,
-					 WRITE_PFL	  = 6'b100100,
-					 WRITE_2_PFL  = 6'b100101,
-				CLEAR_SR_WR_PFL  = 6'b100110,
-				READ_SR_WR_PFL   = 6'b100111,     
-				READ_SR_ER_PFL   = 6'b101000,
-				CLEAR_SR_ER_PFL  = 6'b101001,	
-				WRITE_ER_PFL     = 6'b101010, 
-			   WRITE_ER_2_PFL   = 6'b101011,
-				     TO_Z_PFL    = 6'b101100,
-				     FROM_Z_PFL  = 6'b101101,
-					  CNT_RST     = 6'b101110,
-					  CNT_CFG     = 6'b101111,
-					  PAGE        = 6'b110000,
-					  CFG_DN      = 6'b110001,
-					  WAIT_CFG    = 6'b110010,
-					  CFG         = 6'b110011,
-					  PAGE_2      = 6'b110100,
-					  FLAG        = 6'b110101,
-					  WR_TB       = 6'b110110,
-					  WAIT_WR     = 6'b110111;
+parameter [3:0] IDLE         = 4'b0001,
+                FST_CFG      = 4'b0010,
+				    FST_IDLE     = 4'b0011,
+					 READ_FIRM    = 4'b0100,
+					 CNT_RST      = 4'b0101,
+					  CNT_CFG     = 4'b0110,
+					  PAGE        = 4'b0111,
+					  CFG_DN      = 4'b1000,
+					  WAIT_CFG    = 4'b1001,
+					  CFG         = 4'b1010,
+					  FLAG        = 4'b1011,
+					  WR_TB       = 4'b1100,
+					  WAIT_WR     = 4'b1101,
+					  WR_DN       = 4'b1110;
 					  
 assign   flash_cen    = (pfl_flash_access_granted_ins )? pfl_cen  : fl_cen  ; 
 assign   flash_oen    = (pfl_flash_access_granted_ins )? pfl_oen  : fl_oen  ;
 assign   flash_wen    = (pfl_flash_access_granted_ins )? pfl_wen  : fl_wen  ;
-assign   flash_advn   = (pfl_flash_access_granted_ins )? pfl_advn : fl_advn ;
+// assign   flash_advn   = (pfl_flash_access_granted_ins )? pfl_advn : fl_advn ;
 //assign   fsm_d        = (pfl_flash_access_granted_ins )? 1'bz     : fl_data ;
+//assign   fsm_d        = (pfl_flash_access_granted_ins )? pfl_data     : fl_data ;
+
 assign   fsm_a        = (pfl_flash_access_granted_ins )? pfl_addr : fl_addr ;
 
-assign   pfl_data     = (pfl_flash_access_granted_ins )? fsm_d    : 1'bz ;
-assign   fsm_d        =  fl_data ;
+//assign   pfl_data     = (pfl_flash_access_granted_ins )? fsm_d  :  1'bz  ;
+//assign   fl_data_rd   = (pfl_flash_access_granted_ins )? 1'bz   :  fsm_d ;
+//assign   fsm_d        =  fl_data_wr;
+//assign   fsm_d        =  fl_data ;
 //assign   pfl_data = fsm_d ;
+//assign   fl_data  = fsm_d ;
 
 wire   fl_cen  ,pfl_cen  ; 
 wire   fl_oen  ,pfl_oen  ;
 wire   fl_wen  ,pfl_wen  ;
 wire   fl_advn ,pfl_advn ;
-wire [15:0 ]    fl_data , pfl_data    ;  
+wire [15:0 ]    pfl_data, fl_data     ;  
 wire [25:1 ]    fl_addr , pfl_addr    ; 
 
 //-------------------------------------------------------------
 reg [2:0  ]   cnt      = 3'b000       ;				
-reg [5:0  ]   state    = READ_FIRM    ;
+reg [3:0  ]   state    = WR_TB        ;
 reg [23:0 ]   kol      = 24'h000000   ;	
 reg [1:0  ]   pos      = 2'b00        ;
 reg           sig      = 1'b0         ;
@@ -262,7 +255,9 @@ case (state)
 					      cnt_rst   <= 24'h000000    ;
 							cnt_cfg   <= 24'h000000    ;
 							cnt_wt    <= 28'h0000000   ;
-							if (!max_csn) state <= FLAG;
+							//if (!max_csn) state <= FLAG;
+							//if (!load_flag) state <= WR_TB;
+							
 				      end	// IDLE
 					  
 			FLAG : begin 
@@ -281,7 +276,7 @@ case (state)
 							if ( oper_compl)
 			      				 state <= CFG         ;
 					*/	
-					
+
      			    end //PAGE 
 					 
 			CFG:  begin
@@ -354,12 +349,20 @@ case (state)
 			 WR_TB : begin
 			           pfl_flash_access <= 1'b0     ;
 			           fl_wr_req_reg    <= 1'b0     ;
-						  wr_page_reg      <= p_flag   ;
+						  wr_page_reg      <= 2'b10    ;  //p_flag 
 			           state <= WAIT_WR ;
 						end
+						
 			 WAIT_WR : begin
-			           if ( wr_compl == 1'b1)	state <= IDLE ;
-						 end
+			           if ( wr_compl == 1'b1)	state <= WR_DN ;
+						  end
+						 
+			 WR_DN   : begin
+			           pfl_flash_access <= 1'b1     ;
+			           fl_wr_req_reg    <= 1'b1     ;	
+						  state <= IDLE ;
+						  end
+			        
 	   endcase 	 
  end				  
 
@@ -369,7 +372,7 @@ case (state)
 		.pfl_flash_access_granted (pfl_flash_access_granted_ins), // pfl_flash_access_granted.pfl_flash_access_granted
 		.pfl_flash_access_request (pfl_flash_access_request_ins), // pfl_flash_access_request.pfl_flash_access_request
 		.flash_addr               (pfl_addr),                        // flash_addr.flash_addr
-		.flash_data               (pfl_data),                        // flash_data.flash_data
+		.flash_data               (pfl_data ),                        // flash_data.flash_data
 		.flash_nce                (pfl_cen),                    // flash_nce.flash_nce
 		.flash_nwe                (pfl_wen),                    // flash_nwe.flash_nwe
 		.flash_noe                (pfl_oen),                    // flash_noe.flash_noe
@@ -402,8 +405,10 @@ case (state)
   .fc_flash_oen        ( fl_oen            ),
  // .fc_flash_rdybsyn    ( flash_rdybsyn ),
  // .fc_flash_resetn     ( flash_resetn  ),
-  .fc_flash_wen        ( fl_wen            ),
-  .fc_fsm_d            ( fl_data          ),
+  .fc_flash_wen          ( fl_wen            ),
+  .fc_fsm_d              ( fsm_d        ),
+ // .fc_fsm_d_rd         ( fsm_d        ),
+  //.fc_fsm_d_wr         ( fsm_d        ),
   .fc_fsm_a            ( fl_addr           ),
 //--------------- fifo  --------------------
  //  .fc_fifo_in          ( fifo_in       ),  
