@@ -427,7 +427,7 @@ module c4gx_f896_host (
 //-----------max-----------
 	output			max_csn,
 	output			max_oen,
-	output			max_wen,
+	input			   max_wen,
 
 	//TEMPRESERVE
 	input ncso,
@@ -642,7 +642,7 @@ module c4gx_f896_host (
 //////////////////////////////////////////////////////////
 assign	max_csn       = reg_max_csn   ;                   // reconfig signal
 assign   max_oen       = 1'bz    ;
-assign	max_wen       = 1'bz    ;
+//assign	max_wen       = 1'bz    ;
 reg      reg_max_csn   = 1'b1;
 
 //--------------------  initial flash  -------------------------
@@ -877,23 +877,55 @@ case (state)
 						                 sig_oe    <= 1'b1        ;
 											  state     <= UNLOCK_TAB  ;
 											  
-											  if (firm_N [15:10] == 6'b111111)
+											  if      (firm_N [15:10] == 6'b111111)
 											      begin
-															 adrcnt  <= ADDR_FIRM_1 ;
-															 wr_tabl <= {6'b101100,10'b0000000000};
+															     adrcnt  <= ADDR_FIRM_1  ;
+															     wr_tabl <= {6'b101100,10'b0000000000};
 													end 
-											  else if ((firm_N [15:10] == 6'b101100) || (firm_N [15:10] == 6'b100101))
+													
+											  else if (firm_N [15:10] == 6'b101100)
 											      begin
-											             adrcnt <= ADDR_FIRM_2  ;
-															 wr_tabl <= {6'b110110,10'b0000000000};
+													      if (!max_wen)
+															   begin
+																   adrcnt  <= ADDR_FIRM_1 ;
+															      wr_tabl <= {6'b101100,10'b0000000000};
+															   end
+															else
+															   begin
+											                  adrcnt  <= ADDR_FIRM_2 ;
+															      wr_tabl <= {6'b110110,10'b0000000000};
+															   end
 													end
+													
+											   else if (firm_N [15:10] == 6'b100101)
+											      begin
+													      if (!max_wen)
+															   begin
+																   adrcnt  <= ADDR_FIRM_1 ;
+															      wr_tabl <= {6'b100101,10'b0000000000};
+															   end
+															else
+															   begin
+											                  adrcnt  <= ADDR_FIRM_2 ;
+															      wr_tabl <= {6'b110110,10'b0000000000};
+															   end
+													end
+													
 											  else if (firm_N [15:10] == 6'b110110)
 											      begin
-											             adrcnt <= ADDR_FIRM_1  ;
-															 wr_tabl <= {6'b100101,10'b0000000000};
-															 
+													      if (!max_wen)
+															   begin
+																   adrcnt  <= ADDR_FIRM_2 ;
+															      wr_tabl <= {6'b110110,10'b0000000000};
+															   end
+															else
+															   begin
+											                  adrcnt <= ADDR_FIRM_1  ;
+															      wr_tabl <= {6'b100101,10'b0000000000}; 
+																end
 													end
-							       end  // 3'b111
+											  
+							        end  // 3'b111
 						  endcase
             cnt <= cnt + 1'b1;						  
      			end //READ_N
