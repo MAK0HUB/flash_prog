@@ -83,7 +83,7 @@ assign   msel_0      = 1'bZ ;
 assign   msel_1      = 1'bZ ;
 assign   msel_2      = 1'bZ ;
 
-assign max_leds = {1'b0, !flag [0], !flag [1], state[0]};
+assign max_leds = {(flag[0] || flag [1]), !flag [0], !flag [1], state[0]};
 
 assign max_wen     = reg_max_wen;
 reg    reg_max_wen = 1'b1;
@@ -136,14 +136,15 @@ reg [23:0]   cnt_rst = 24'h000000  ;
 reg [23:0]   cnt_cfg = 24'h000000  ;
 reg [27:0]   cnt_wt  = 28'h0000000 ;
 reg  reg_fst_cfg     = 1'b1        ;
+reg met_1,met_2,reg_max_csn        ;
 //------------------------------------------------------------
 
-
 always @( posedge clkin_max_100)
-
 begin
+met_1        <= max_csn;
+met_2        <= met_1  ;
+reg_max_csn  <= met_2  ;
 //if (!sys_resetn) state <= IDLE; 
-
 case (state)  
 
         FST_IDLE : begin
@@ -158,11 +159,12 @@ case (state)
 		  READ_FIRM: begin
 		               pfl_flash_access <= 1'b0   ;
 			            fl_rd_req_reg    <= 1'b0   ;
+														
 							case (pfl_str)
-							  2'b00: flag <= pfl_str   ;
+							  2'b00: flag <= 2'b01     ;
 							  2'b01: flag <= pfl_str   ;
 							  2'b10: flag <= pfl_str   ;
-							  2'b11: flag <= 2'b01     ;
+							  2'b11: flag <= 2'b00     ;
 							endcase
 							if ( rd_compl)
 			      				  state <= FST_CFG   ;		
@@ -171,7 +173,7 @@ case (state)
 		  FST_CFG:  begin
 			            pfl_flash_access <= 1'b1   ;
 							fl_rd_req_reg    <= 1'b1   ;	
-					      state <= CNT_CFG           ;	
+					      state <= CNT_CFG           ;
      			      end // FST_CFG
 
 		  IDLE   :  begin
@@ -181,7 +183,7 @@ case (state)
 					      cnt_rst   <= 24'h000000    ;
 							cnt_cfg   <= 24'h000000    ;
 							cnt_wt    <= 28'h0000000   ;
-							if (!max_csn) 
+							if (!reg_max_csn) 
 							  begin
 							     state       <= FLAG;
 								  reg_max_wen <= 1'b1;
@@ -194,11 +196,11 @@ case (state)
 			       end 
 					 
 			PAGE : begin
-			            if ((flag == 2'b00 ) || (flag == 2'b10  )) flag <= 2'b01;
-							else if (flag == 2'b01) flag <= 2'b10;
-							state   <= CFG              ;
+			            if (( flag == 2'b00 ) || (flag == 2'b01 )) flag <= 2'b10;
+							else if (flag == 2'b10) flag <= 2'b01;
+							state   <= CFG             ;
      			    end //PAGE 
-					 
+			
 			CFG:  begin
 			            pfl_flash_access <= 1'b1    ;
 					      state            <= CNT_CFG ;	
@@ -255,14 +257,14 @@ case (state)
 							    begin
 								    if (reg_fst_cfg)
 								       case (pfl_str)
-							           2'b00: flag <= 2'b00   ;
-							           2'b01: flag <= 2'b00   ;
-							           2'b10: flag <= 2'b01   ;
-							           2'b11: flag <= 2'b10   ;
+							           2'b00: flag <= 2'b10   ; // from 2
+							           2'b01: flag <= 2'b00   ; // from 0
+							           2'b10: flag <= 2'b01   ; // from 1
+							           2'b11: flag <= 2'b01   ; 
 							          endcase
 								    else       flag <= p_flag  ;	
 								 reg_max_wen <= 1'b0           ;
-                         state       <= CFG            ; 
+                         state       <= CNT_CFG        ; 
 								 end 
      			        end //CFG_DN 	
 

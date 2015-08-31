@@ -73,27 +73,30 @@ case (state)
 			           3'b111: begin sig_ce  <= 1'b1        ;
 						                sig_oe  <= 1'b1        ;
 											 state   <= IDLE        ;
-											  
-											  if      (firm_N [15:10] == 6'b100101) 
+											 pfl_str_reg <= firm_N [15:14];
+											 rd_done_reg <= 1'b1    ;	
+											 /*
+											  if      (firm_N [15:14] == 2'b01) 
 											     begin
 															pfl_str_reg <= 2'b01;
 															rd_done_reg <= 1'b1;	
 												  end
-											  else if (firm_N [15:10] == 6'b101100)
+											  else if (firm_N [15:14] == 2'b00)
 											     begin
 														   pfl_str_reg <= 2'b11;
 														   rd_done_reg <= 1'b1;	
 												  end
-											  else if (firm_N [15:10] == 6'b110110)
+											  else if (firm_N [15:14] == 2'b10)
 											     begin
 														   pfl_str_reg <= 2'b10;
 														   rd_done_reg <= 1'b1;	
 											     end
-											  else if (firm_N [15:10] == 6'b111111)
+											  else if (firm_N [15:0] == 16'hFFFF)
 											     begin
 														   pfl_str_reg <= 2'b00;
 														   rd_done_reg <= 1'b1;	
 											     end
+												  */
 							       end  // 3'b111
 						  endcase
             cnt <= cnt + 1'b1;						  
