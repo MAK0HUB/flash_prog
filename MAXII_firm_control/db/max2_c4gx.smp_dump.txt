@@ -1,0 +1,119 @@
+
+State Machine - |sys_cpld_top|flash_control_MM:cpld_flash_cont|state
+Name state.READ_TAB 
+state.IDLE 0 
+state.READ_TAB 1 
+
+State Machine - |sys_cpld_top|pfl_fun:pfl_fun_conf_fpga|altera_parallel_flash_loader:parallel_flash_loader_0|altparallel_flash_loader:altparallel_flash_loader_component|alt_pfl:\PFL_CFI:pfl_cfi_inst|alt_pfl_cfg3:\CFG3:cfg|alt_pfl_cfg_fpga:alt_pfl_cfg_fpga|current_state
+Name current_state.CFG_SHIFT current_state.CFG_WAIT current_state.CFG_SAME current_state.CFG_INIT 
+current_state.CFG_INIT 0 0 0 0 
+current_state.CFG_SAME 0 0 1 1 
+current_state.CFG_WAIT 0 1 0 1 
+current_state.CFG_SHIFT 1 0 0 1 
+
+State Machine - |sys_cpld_top|pfl_fun:pfl_fun_conf_fpga|altera_parallel_flash_loader:parallel_flash_loader_0|altparallel_flash_loader:altparallel_flash_loader_component|alt_pfl:\PFL_CFI:pfl_cfi_inst|alt_pfl_cfg3:\CFG3:cfg|alt_pfl_cfg3_control:alt_pfl_cfg3_control|current_state
+Name current_state.CFG_RECONFIG current_state.CFG_HALT current_state.CFG_REVERT current_state.CFG_ERROR current_state.CFG_DATA_DUMMY current_state.CFG_DATA current_state.CFG_LOAD_DATA current_state.CFG_PRE_DATA current_state.CFG_HEADER_DUMMY current_state.CFG_HEADER current_state.CFG_LOAD_HEADER current_state.CFG_PRE_HEADER current_state.CFG_OPTION_DUMMY current_state.CFG_OPTION current_state.CFG_LOAD_OPTION current_state.CFG_PRE_OPTION current_state.CFG_VERSION_DUMMY current_state.CFG_VERSION current_state.CFG_LOAD_VERSION current_state.CFG_PRE_VERSION current_state.CFG_USERMODE current_state.CFG_USERMODE_CONFIRM current_state.CFG_LOAD_USERMODE_CONFIRM current_state.CFG_PRE_USERMODE_CONFIRM current_state.CFG_USERMODE_WAIT current_state.CFG_LOAD_USERMODE_WAIT current_state.CFG_PRE_USERMODE_WAIT current_state.CFG_NSTATUS_WAIT current_state.CFG_LOAD_NSTATUS_WAIT current_state.CFG_PRE_NSTATUS_WAIT current_state.CFG_NSTATUS current_state.CFG_LOAD_NSTATUS current_state.CFG_PRE_NSTATUS current_state.CFG_RECONFIG_WAIT current_state.CFG_NCONFIG current_state.CFG_LOAD_NCONFIG current_state.CFG_PRE_NCONFIG current_state.CFG_INIT current_state.CFG_SAME current_state.CFG_POWERUP 
+current_state.CFG_POWERUP 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+current_state.CFG_SAME 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+current_state.CFG_INIT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+current_state.CFG_PRE_NCONFIG 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+current_state.CFG_LOAD_NCONFIG 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+current_state.CFG_NCONFIG 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+current_state.CFG_RECONFIG_WAIT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+current_state.CFG_PRE_NSTATUS 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+current_state.CFG_LOAD_NSTATUS 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+current_state.CFG_NSTATUS 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+current_state.CFG_PRE_NSTATUS_WAIT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_LOAD_NSTATUS_WAIT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_NSTATUS_WAIT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_PRE_USERMODE_WAIT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_LOAD_USERMODE_WAIT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_USERMODE_WAIT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_PRE_USERMODE_CONFIRM 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_LOAD_USERMODE_CONFIRM 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_USERMODE_CONFIRM 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_USERMODE 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_PRE_VERSION 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_LOAD_VERSION 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_VERSION 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_VERSION_DUMMY 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_PRE_OPTION 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_LOAD_OPTION 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_OPTION 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_OPTION_DUMMY 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_PRE_HEADER 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_LOAD_HEADER 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_HEADER 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_HEADER_DUMMY 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_PRE_DATA 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_LOAD_DATA 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_DATA 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_DATA_DUMMY 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_ERROR 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_REVERT 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_HALT 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.CFG_RECONFIG 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |sys_cpld_top|pfl_fun:pfl_fun_conf_fpga|altera_parallel_flash_loader:parallel_flash_loader_0|altparallel_flash_loader:altparallel_flash_loader_component|alt_pfl:\PFL_CFI:pfl_cfi_inst|alt_pfl_pgm_enhanced:\PGM1:ENHANCED_PGM:pgm_enhanced|alt_pfl_pgm_verify:\PGM_CRC_DISABLE:pgm_crc|current_state
+Name current_state.CRC_EXTRA_DUMMY current_state.CRC_DUMMY current_state.CRC_SAME current_state.CRC_INIT current_state.CRC_ADDR 
+current_state.CRC_INIT 0 0 0 0 0 
+current_state.CRC_SAME 0 0 1 1 0 
+current_state.CRC_DUMMY 0 1 0 1 0 
+current_state.CRC_EXTRA_DUMMY 1 0 0 1 0 
+current_state.CRC_ADDR 0 0 0 1 1 
+
+State Machine - |sys_cpld_top|pfl_fun:pfl_fun_conf_fpga|altera_parallel_flash_loader:parallel_flash_loader_0|altparallel_flash_loader:altparallel_flash_loader_component|alt_pfl:\PFL_CFI:pfl_cfi_inst|alt_pfl_pgm_enhanced:\PGM1:ENHANCED_PGM:pgm_enhanced|alt_pfl_pgm_sm:pgm_sm|alt_pfl_pgm_flash_sm:flash_sm|present_state
+Name present_state.WRITE_TO_FLASH_POS present_state.WRITE_TO_FLASH_NEG present_state.END_CHECK_STATUS present_state.FULL present_state.FAIL present_state.SUCCESS present_state.INTEL_CLEAR_STATUS_REG present_state.SPANSION_READ_STATUS2 present_state.SPANSION_READ_STATUS1 present_state.INTEL_POST_READ present_state.INTEL_READ_STATUS present_state.INTEL present_state.SPANSION present_state.START_CHECK_STATUS present_state.END_WRITE present_state.INCREASE_ADDR present_state.WRITE_TO_FLASH present_state.WRITE_DATA_BUS present_state.WRITE_ADDRESS_BUS present_state.READ_REQUEST present_state.IDLE present_state.INTEL_PRE_READ_A present_state.SPANSION_POST_READ1 present_state.SPANSION_PRE_READ2_B present_state.SPANSION_PRE_READ2_A present_state.SPANSION_PRE_READ1_B present_state.SPANSION_PRE_READ1_A present_state.INTEL_PRE_READ_B present_state.START_WRITE_PROCESS 
+present_state.START_WRITE_PROCESS 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+present_state.INTEL_PRE_READ_B 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+present_state.SPANSION_PRE_READ1_A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+present_state.SPANSION_PRE_READ1_B 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+present_state.SPANSION_PRE_READ2_A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+present_state.SPANSION_PRE_READ2_B 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+present_state.SPANSION_POST_READ1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+present_state.INTEL_PRE_READ_A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+present_state.IDLE 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+present_state.READ_REQUEST 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+present_state.WRITE_ADDRESS_BUS 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+present_state.WRITE_DATA_BUS 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+present_state.WRITE_TO_FLASH 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.INCREASE_ADDR 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.END_WRITE 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.START_CHECK_STATUS 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.SPANSION 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.INTEL 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.INTEL_READ_STATUS 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.INTEL_POST_READ 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.SPANSION_READ_STATUS1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.SPANSION_READ_STATUS2 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.INTEL_CLEAR_STATUS_REG 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.SUCCESS 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.FAIL 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.FULL 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.END_CHECK_STATUS 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.WRITE_TO_FLASH_NEG 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.WRITE_TO_FLASH_POS 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |sys_cpld_top|pfl_fun:pfl_fun_conf_fpga|altera_parallel_flash_loader:parallel_flash_loader_0|altparallel_flash_loader:altparallel_flash_loader_component|alt_pfl:\PFL_CFI:pfl_cfi_inst|alt_pfl_pgm_enhanced:\PGM1:ENHANCED_PGM:pgm_enhanced|alt_pfl_pgm_sm:pgm_sm|alt_pfl_pgm_fifo_sm:fifo_sm|present_state
+Name present_state.STATE_SPANSION_UNLOCK_BYPASS present_state.STATE_SET_PARAM present_state.STATE_SET_INST present_state.STATE_SET_ADDR present_state.STATE_SYNC present_state.STATE_SPANSION_WRITE_BUFFER_CNFM present_state.STATE_INTEL_WRITE_BUFFER_CNFM present_state.STATE_INST_2 present_state.STATE_INST_1 present_state.STATE_CUSTOM_WRITE present_state.STATE_SPANSION_UNLOCK_2 present_state.STATE_SPANSION_UNLOCK_1 present_state.STATE_INTEL_UNLOCK present_state.STATE_START present_state.STATE_EXIT 
+present_state.STATE_EXIT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+present_state.STATE_START 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+present_state.STATE_INTEL_UNLOCK 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+present_state.STATE_SPANSION_UNLOCK_1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+present_state.STATE_SPANSION_UNLOCK_2 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+present_state.STATE_CUSTOM_WRITE 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+present_state.STATE_INST_1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+present_state.STATE_INST_2 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+present_state.STATE_INTEL_WRITE_BUFFER_CNFM 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+present_state.STATE_SPANSION_WRITE_BUFFER_CNFM 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+present_state.STATE_SYNC 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+present_state.STATE_SET_ADDR 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+present_state.STATE_SET_INST 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.STATE_SET_PARAM 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+present_state.STATE_SPANSION_UNLOCK_BYPASS 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |sys_cpld_top|pfl_fun:pfl_fun_conf_fpga|altera_parallel_flash_loader:parallel_flash_loader_0|altparallel_flash_loader:altparallel_flash_loader_component|alt_pfl:\PFL_CFI:pfl_cfi_inst|alt_pfl_pgm_enhanced:\PGM1:ENHANCED_PGM:pgm_enhanced|alt_pfl_pgm_sm:pgm_sm|scfifo:scfifo_buffer|a_fffifo:subfifo|a_fefifo:fifo_state|sm_emptyfull
+Name state_middle state_full state_empty 
+state_empty 0 0 0 
+state_middle 1 0 1 
+state_full 0 1 1 

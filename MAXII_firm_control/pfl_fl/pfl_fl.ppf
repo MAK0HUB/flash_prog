@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pinplan
+ variation_name="parallel_flash_loader_0"
+ megafunction_name="ALTERA_PARALLEL_FLASH_LOADER"
+ intended_family="MAX II"
+ specifies="all_ports">
+ <global>
+  <pin name="pfl_nreset" direction="input" scope="external" />
+  <pin name="pfl_flash_access_granted" direction="input" scope="external" />
+  <pin name="pfl_clk" direction="input" scope="external" />
+  <pin name="fpga_pgm[2..0]" direction="input" scope="external" />
+  <pin name="fpga_conf_done" direction="input" scope="external" />
+  <pin name="fpga_nstatus" direction="input" scope="external" />
+  <pin name="pfl_flash_access_request" direction="output" scope="external" />
+  <pin name="flash_addr[24..0]" direction="output" scope="external" />
+  <pin name="flash_data[15..0]" direction="bidir" scope="external" />
+  <pin name="flash_nce" direction="output" scope="external" />
+  <pin name="flash_nwe" direction="output" scope="external" />
+  <pin name="flash_noe" direction="output" scope="external" />
+  <pin name="fpga_data" direction="output" scope="external" />
+  <pin name="fpga_dclk" direction="output" scope="external" />
+  <pin name="fpga_nconfig" direction="output" scope="external" />
+ </global>
+</pinplan>

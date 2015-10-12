@@ -1,0 +1,13 @@
+	component pflflashprog is
+		port (
+			pfl_nreset               : in    std_logic                     := 'X';             -- pfl_nreset
+			pfl_flash_access_granted : in    std_logic                     := 'X';             -- pfl_flash_access_granted
+			pfl_flash_access_request : out   std_logic;                                        -- pfl_flash_access_request
+			flash_addr               : out   std_logic_vector(24 downto 0);                    -- flash_addr
+			flash_data               : inout std_logic_vector(15 downto 0) := (others => 'X'); -- flash_data
+			flash_nce                : out   std_logic;                                        -- flash_nce
+			flash_nwe                : out   std_logic;                                        -- flash_nwe
+			flash_noe                : out   std_logic                                         -- flash_noe
+		);
+	end component pflflashprog;
+

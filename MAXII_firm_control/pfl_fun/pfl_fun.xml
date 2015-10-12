@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy
+ date="2015.08.17.14:56:57"
+ outputDirectory="D:/Projects/MaxII_pfl_v2.5_pfl_3p_btn_new/pfl_fun/">
+ <perimeter>
+  <parameter
+     name="AUTO_GENERATION_ID"
+     type="Integer"
+     defaultValue="0"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_UNIQUE_ID"
+     type="String"
+     defaultValue=""
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE_FAMILY"
+     type="String"
+     defaultValue="MAX II"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE"
+     type="String"
+     defaultValue="EPM2210GF256C3"
+     onHdl="0"
+     affectsHdl="1" />
+  <interface name="pfl_nreset" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="pfl_nreset" direction="input" role="pfl_nreset" width="1" />
+  </interface>
+  <interface name="pfl_flash_access_granted" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port
+       name="pfl_flash_access_granted"
+       direction="input"
+       role="pfl_flash_access_granted"
+       width="1" />
+  </interface>
+  <interface name="pfl_flash_access_request" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port
+       name="pfl_flash_access_request"
+       direction="output"
+       role="pfl_flash_access_request"
+       width="1" />
+  </interface>
+  <interface name="flash_addr" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="flash_addr" direction="output" role="flash_addr" width="25" />
+  </interface>
+  <interface name="flash_data" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="flash_data" direction="bidir" role="flash_data" width="16" />
+  </interface>
+  <interface name="flash_nce" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="flash_nce" direction="output" role="flash_nce" width="1" />
+  </interface>
+  <interface name="flash_nwe" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="flash_nwe" direction="output" role="flash_nwe" width="1" />
+  </interface>
+  <interface name="flash_noe" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="flash_noe" direction="output" role="flash_noe" width="1" />
+  </interface>
+  <interface name="pfl_clk" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="pfl_clk" direction="input" role="pfl_clk" width="1" />
+  </interface>
+  <interface name="fpga_pgm" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="fpga_pgm" direction="input" role="fpga_pgm" width="3" />
+  </interface>
+  <interface name="fpga_conf_done" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port
+       name="fpga_conf_done"
+       direction="input"
+       role="fpga_conf_done"
+       width="1" />
+  </interface>
+  <interface name="fpga_nstatus" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="fpga_nstatus" direction="input" role="fpga_nstatus" width="1" />
+  </interface>
+  <interface name="fpga_data" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="fpga_data" direction="output" role="fpga_data" width="8" />
+  </interface>
+  <interface name="fpga_dclk" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="fpga_dclk" direction="output" role="fpga_dclk" width="1" />
+  </interface>
+  <interface name="fpga_nconfig" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="fpga_nconfig" direction="output" role="fpga_nconfig" width="1" />
+  </interface>
+  <interface name="pfl_nreconfigure" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port
+       name="pfl_nreconfigure"
+       direction="input"
+       role="pfl_nreconfigure"
+       width="1" />
+  </interface>
+  <interface name="flash_nreset" kind="conduit" start="0">
+   <property name="allowMultipleExportRoles" value="true" />
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="flash_nreset" direction="output" role="flash_nreset" width="1" />
+  </interface>
+ </perimeter>
+ <entity
+   path=""
+   parameterizationKey="pfl_fun:1.0:AUTO_DEVICE=EPM2210GF256C3,AUTO_DEVICE_FAMILY=MAX II,AUTO_GENERATION_ID=1439812615,AUTO_UNIQUE_ID=(altera_parallel_flash_loader:14.0:ADDR_WIDTH=25,BURST_MODE=0,BURST_MODE_INTEL=0,BURST_MODE_LATENCY_COUNT=3,BURST_MODE_NUMONYX=0,BURST_MODE_SPANSION=0,CLK_DIVISOR=9,CONF_DATA_WIDTH=8,CONF_WAIT_TIMER_WIDTH=20,DCLK_DIVISOR=1,DECOMPRESSOR_MODE=NONE,DISABLE_CRC_CHECKBOX=false,ENHANCED_FLASH_PROGRAMMING=true,EXTRA_ADDR_BYTE=0,FEATURES_CFG=1,FEATURES_PGM=1,FIFO_SIZE=16,FLASH_BURST_EXTRA_CYCLE=1,FLASH_DATA_WIDTH=16,FLASH_ECC_CHECKBOX=false,FLASH_NRESET_CHECKBOX=true,FLASH_NRESET_COUNTER=5000,FLASH_STATIC_WAIT_WIDTH=15,FLASH_TYPE=CFI_FLASH,INTENDED_DEVICE_FAMILY=MAX II,NFLASH_MFC=NUMONYX,NORMAL_MODE=1,NRB_ADDR=65667072,N_FLASH=1,OPTION_BITS_START_ADDRESS=98304,PAGE_CLK_DIVISOR=2,PAGE_MODE=0,PFL_RSU_WATCHDOG_ENABLED=false,QFLASH_FAST_SPEED=false,QFLASH_MFC=ALTERA,QSPI_DATA_DELAY=0,QSPI_DATA_DELAY_COUNT=1,RSU_WATCHDOG_COUNTER=100000000,SAFE_MODE_HALT=1,SAFE_MODE_RETRY=0,SAFE_MODE_REVERT=0,SAFE_MODE_REVERT_ADDR=131072,TRISTATE_CHECKBOX=true,US_UNIT_COUNTER=1,clock_frequency=100.0,dclk_divisor_combo=1,decompressor_combo=None,disable_crc_check=true,enhanced_flash_programming_combo=Speed,fifo_size_combo=16,flash_access_time=100,flash_data_width_combo=16 bits,flash_device_combo=CFI 512 Mbit,flash_nreset_check=true,flash_type_combo=CFI Parallel Flash,fpga_conf_scheme_combo=FPP (fast passive parallel),nflash_access_time=100,nflash_data_width_combo=8 bits,nflash_device_combo=NAND 512 Mbit,nflash_mfc_combo=Micron(NAND),nflash_rb_edit=0,num_flash_combo=1,num_nflash_combo=1,num_qflash_combo=4,operating_mode_combo=Flash Programming and FPGA Configuration,option_bit_address=98304,qflash_mfc_combo=Macronix,qflash_size_combo=EPCQ 16 Mbit,qspi_size_combo=QSPI 8 Mbit,read_modes_combo=Normal Mode,reconfigure_checkbox=true,rsu_watchdog_checkbox=false,rsu_watchdog_counter_edit=200.0,safe_mode_combo=Halt,safe_mode_revert_edit=131072)"
+   instancePathKey="pfl_fun"
+   kind="pfl_fun"
+   version="1.0"
+   name="pfl_fun">
+  <parameter name="AUTO_DEVICE_FAMILY" value="MAX II" />
+  <parameter name="AUTO_UNIQUE_ID" value="" />
+  <parameter name="AUTO_DEVICE" value="EPM2210GF256C3" />
+  <parameter name="AUTO_GENERATION_ID" value="1439812615" />
+  <generatedFiles>
+   <file
+       path="D:/Projects/MaxII_pfl_v2.5_pfl_3p_btn_new/pfl_fun/synthesis/pfl_fun.v"
+       type="VERILOG" />
+  </generatedFiles>
+  <childGeneratedFiles>
+   <file
+       path="D:/Projects/MaxII_pfl_v2.5_pfl_3p_btn_new/pfl_fun/synthesis/submodules/altera_parallel_flash_loader.v"
+       type="VERILOG"
+       attributes="" />
+  </childGeneratedFiles>
+  <sourceFiles>
+   <file path="D:/Projects/MaxII_pfl_v2.5_pfl_3p_btn_new/pfl_fun.qsys" />
+  </sourceFiles>
+  <childSourceFiles>
+   <file
+       path="C:/altera/14.0/ip/altera/altera_parallel_flash_loader/altera_parallel_flash_loader_hw.tcl" />
+  </childSourceFiles>
+  <messages>
+   <message level="Debug" culprit="pfl_fun">queue size: 0 starting:pfl_fun "pfl_fun"</message>
+   <message level="Progress" culprit="min"></message>
+   <message level="Progress" culprit="max"></message>
+   <message level="Progress" culprit="current"></message>
+   <message level="Debug">Transform: CustomInstructionTransform</message>
+   <message level="Debug">No custom instruction connections, skipping transform </message>
+   <message level="Debug" culprit="merlin_custom_instruction_transform"><![CDATA[After transform: <b>1</b> modules, <b>0</b> connections]]></message>
+   <message level="Debug">Transform: MMTransform</message>
+   <message level="Debug">Transform: InterruptMapperTransform</message>
+   <message level="Debug">Transform: InterruptSyncTransform</message>
+   <message level="Debug">Transform: InterruptFanoutTransform</message>
+   <message level="Debug">Transform: AvalonStreamingTransform</message>
+   <message level="Debug">Transform: ResetAdaptation</message>
+   <message level="Debug" culprit="pfl_fun"><![CDATA["<b>pfl_fun</b>" reuses <b>altera_parallel_flash_loader</b> "<b>submodules/altera_parallel_flash_loader</b>"]]></message>
+   <message level="Debug" culprit="pfl_fun">queue size: 0 starting:altera_parallel_flash_loader "submodules/altera_parallel_flash_loader"</message>
+   <message level="Info" culprit="parallel_flash_loader_0">generating top-level entity altera_parallel_flash_loader</message>
+   <message level="Info" culprit="parallel_flash_loader_0"><![CDATA["<b>pfl_fun</b>" instantiated <b>altera_parallel_flash_loader</b> "<b>parallel_flash_loader_0</b>"]]></message>
+  </messages>
+ </entity>
+ <entity
+   path="submodules/"
+   parameterizationKey="altera_parallel_flash_loader:14.0:ADDR_WIDTH=25,BURST_MODE=0,BURST_MODE_INTEL=0,BURST_MODE_LATENCY_COUNT=3,BURST_MODE_NUMONYX=0,BURST_MODE_SPANSION=0,CLK_DIVISOR=9,CONF_DATA_WIDTH=8,CONF_WAIT_TIMER_WIDTH=20,DCLK_DIVISOR=1,DECOMPRESSOR_MODE=NONE,DISABLE_CRC_CHECKBOX=false,ENHANCED_FLASH_PROGRAMMING=true,EXTRA_ADDR_BYTE=0,FEATURES_CFG=1,FEATURES_PGM=1,FIFO_SIZE=16,FLASH_BURST_EXTRA_CYCLE=1,FLASH_DATA_WIDTH=16,FLASH_ECC_CHECKBOX=false,FLASH_NRESET_CHECKBOX=true,FLASH_NRESET_COUNTER=5000,FLASH_STATIC_WAIT_WIDTH=15,FLASH_TYPE=CFI_FLASH,INTENDED_DEVICE_FAMILY=MAX II,NFLASH_MFC=NUMONYX,NORMAL_MODE=1,NRB_ADDR=65667072,N_FLASH=1,OPTION_BITS_START_ADDRESS=98304,PAGE_CLK_DIVISOR=2,PAGE_MODE=0,PFL_RSU_WATCHDOG_ENABLED=false,QFLASH_FAST_SPEED=false,QFLASH_MFC=ALTERA,QSPI_DATA_DELAY=0,QSPI_DATA_DELAY_COUNT=1,RSU_WATCHDOG_COUNTER=100000000,SAFE_MODE_HALT=1,SAFE_MODE_RETRY=0,SAFE_MODE_REVERT=0,SAFE_MODE_REVERT_ADDR=131072,TRISTATE_CHECKBOX=true,US_UNIT_COUNTER=1,clock_frequency=100.0,dclk_divisor_combo=1,decompressor_combo=None,disable_crc_check=true,enhanced_flash_programming_combo=Speed,fifo_size_combo=16,flash_access_time=100,flash_data_width_combo=16 bits,flash_device_combo=CFI 512 Mbit,flash_nreset_check=true,flash_type_combo=CFI Parallel Flash,fpga_conf_scheme_combo=FPP (fast passive parallel),nflash_access_time=100,nflash_data_width_combo=8 bits,nflash_device_combo=NAND 512 Mbit,nflash_mfc_combo=Micron(NAND),nflash_rb_edit=0,num_flash_combo=1,num_nflash_combo=1,num_qflash_combo=4,operating_mode_combo=Flash Programming and FPGA Configuration,option_bit_address=98304,qflash_mfc_combo=Macronix,qflash_size_combo=EPCQ 16 Mbit,qspi_size_combo=QSPI 8 Mbit,read_modes_combo=Normal Mode,reconfigure_checkbox=true,rsu_watchdog_checkbox=false,rsu_watchdog_counter_edit=200.0,safe_mode_combo=Halt,safe_mode_revert_edit=131072"
+   instancePathKey="pfl_fun:.:parallel_flash_loader_0"
+   kind="altera_parallel_flash_loader"
+   version="14.0"
+   name="altera_parallel_flash_loader">
+  <parameter name="DISABLE_CRC_CHECKBOX" value="false" />
+  <parameter name="nflash_data_width_combo" value="8 bits" />
+  <parameter name="DCLK_DIVISOR" value="1" />
+  <parameter name="NRB_ADDR" value="65667072" />
+  <parameter name="rsu_watchdog_counter_edit" value="200.0" />
+  <parameter name="CONF_WAIT_TIMER_WIDTH" value="20" />
+  <parameter name="PAGE_MODE" value="0" />
+  <parameter name="N_FLASH" value="1" />
+  <parameter name="BURST_MODE" value="0" />
+  <parameter name="qflash_size_combo" value="EPCQ 16 Mbit" />
+  <parameter name="nflash_device_combo" value="NAND 512 Mbit" />
+  <parameter name="DECOMPRESSOR_MODE" value="NONE" />
+  <parameter name="num_qflash_combo" value="4" />
+  <parameter name="clock_frequency" value="100.0" />
+  <parameter name="flash_type_combo" value="CFI Parallel Flash" />
+  <parameter name="qflash_mfc_combo" value="Macronix" />
+  <parameter name="OPTION_BITS_START_ADDRESS" value="98304" />
+  <parameter name="PAGE_CLK_DIVISOR" value="2" />
+  <parameter name="rsu_watchdog_checkbox" value="false" />
+  <parameter name="CLK_DIVISOR" value="9" />
+  <parameter name="FLASH_STATIC_WAIT_WIDTH" value="15" />
+  <parameter name="FLASH_NRESET_CHECKBOX" value="true" />
+  <parameter name="NORMAL_MODE" value="1" />
+  <parameter name="QFLASH_FAST_SPEED" value="false" />
+  <parameter name="decompressor_combo" value="None" />
+  <parameter name="SAFE_MODE_HALT" value="1" />
+  <parameter name="enhanced_flash_programming_combo" value="Speed" />
+  <parameter name="RSU_WATCHDOG_COUNTER" value="100000000" />
+  <parameter name="flash_access_time" value="100" />
+  <parameter name="INTENDED_DEVICE_FAMILY" value="MAX II" />
+  <parameter name="dclk_divisor_combo" value="1" />
+  <parameter name="CONF_DATA_WIDTH" value="8" />
+  <parameter name="US_UNIT_COUNTER" value="1" />
+  <parameter name="EXTRA_ADDR_BYTE" value="0" />
+  <parameter name="PFL_RSU_WATCHDOG_ENABLED" value="false" />
+  <parameter name="nflash_access_time" value="100" />
+  <parameter name="FLASH_DATA_WIDTH" value="16" />
+  <parameter
+     name="operating_mode_combo"
+     value="Flash Programming and FPGA Configuration" />
+  <parameter name="SAFE_MODE_REVERT" value="0" />
+  <parameter name="BURST_MODE_LATENCY_COUNT" value="3" />
+  <parameter name="read_modes_combo" value="Normal Mode" />
+  <parameter name="NFLASH_MFC" value="NUMONYX" />
+  <parameter name="nflash_mfc_combo" value="Micron(NAND)" />
+  <parameter name="reconfigure_checkbox" value="true" />
+  <parameter name="ENHANCED_FLASH_PROGRAMMING" value="true" />
+  <parameter name="QSPI_DATA_DELAY_COUNT" value="1" />
+  <parameter name="fpga_conf_scheme_combo" value="FPP (fast passive parallel)" />
+  <parameter name="SAFE_MODE_RETRY" value="0" />
+  <parameter name="TRISTATE_CHECKBOX" value="true" />
+  <parameter name="num_flash_combo" value="1" />
+  <parameter name="QFLASH_MFC" value="ALTERA" />
+  <parameter name="option_bit_address" value="98304" />
+  <parameter name="FEATURES_CFG" value="1" />
+  <parameter name="BURST_MODE_INTEL" value="0" />
+  <parameter name="safe_mode_revert_edit" value="131072" />
+  <parameter name="flash_device_combo" value="CFI 512 Mbit" />
+  <parameter name="FLASH_BURST_EXTRA_CYCLE" value="1" />
+  <parameter name="BURST_MODE_NUMONYX" value="0" />
+  <parameter name="flash_nreset_check" value="true" />
+  <parameter name="SAFE_MODE_REVERT_ADDR" value="131072" />
+  <parameter name="fifo_size_combo" value="16" />
+  <parameter name="BURST_MODE_SPANSION" value="0" />
+  <parameter name="qspi_size_combo" value="QSPI 8 Mbit" />
+  <parameter name="FLASH_NRESET_COUNTER" value="5000" />
+  <parameter name="nflash_rb_edit" value="0" />
+  <parameter name="flash_data_width_combo" value="16 bits" />
+  <parameter name="FIFO_SIZE" value="16" />
+  <parameter name="FLASH_TYPE" value="CFI_FLASH" />
+  <parameter name="ADDR_WIDTH" value="25" />
+  <parameter name="num_nflash_combo" value="1" />
+  <parameter name="disable_crc_check" value="true" />
+  <parameter name="FEATURES_PGM" value="1" />
+  <parameter name="FLASH_ECC_CHECKBOX" value="false" />
+  <parameter name="safe_mode_combo" value="Halt" />
+  <parameter name="QSPI_DATA_DELAY" value="0" />
+  <generatedFiles>
+   <file
+       path="D:/Projects/MaxII_pfl_v2.5_pfl_3p_btn_new/pfl_fun/synthesis/submodules/altera_parallel_flash_loader.v"
+       type="VERILOG"
+       attributes="" />
+  </generatedFiles>
+  <childGeneratedFiles/>
+  <sourceFiles>
+   <file
+       path="C:/altera/14.0/ip/altera/altera_parallel_flash_loader/altera_parallel_flash_loader_hw.tcl" />
+  </sourceFiles>
+  <childSourceFiles/>
+  <instantiator instantiator="pfl_fun" as="parallel_flash_loader_0" />
+  <messages>
+   <message level="Debug" culprit="pfl_fun">queue size: 0 starting:altera_parallel_flash_loader "submodules/altera_parallel_flash_loader"</message>
+   <message level="Info" culprit="parallel_flash_loader_0">generating top-level entity altera_parallel_flash_loader</message>
+   <message level="Info" culprit="parallel_flash_loader_0"><![CDATA["<b>pfl_fun</b>" instantiated <b>altera_parallel_flash_loader</b> "<b>parallel_flash_loader_0</b>"]]></message>
+  </messages>
+ </entity>
+</deploy>

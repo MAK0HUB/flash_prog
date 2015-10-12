@@ -1,0 +1,22 @@
+{
+	"system" : {
+		"platform" : "windows64",
+		"os_name" : "Windows 7",
+		"os_version" : "6.1"
+	},
+	"error" : {
+		"error_message" : "Access Violation at 0X000007FED638D0F7",
+		"source_file" : "unknown",
+		"line" : "0",
+		"stack_trace" : "\t0x7fed638d0f6: (?get_sec_base_address@PGMIO_BITFIELD@@QEAAPEAEI@Z + 0x6)\n\t0x7feec5d3b04: (?make_last_to_first_shift_stream@PGME_PROGRAMMER@@AEAAIAEBV?$vector@PEBVPGM_BIT_ARRAY@@V?$MEM_STL_ALLOCATOR@PEBVPGM_BIT_ARRAY@@@@@_Dinkum_std@@AEAV?$vector@PEAVPGM_BIT_ARRAY@@V?$MEM_STL_ALLOCATOR@PEAVPGM_BIT_ARRAY@@@@@3@PEAPEAE2@Z + 0x7ad4)\n\t0x7feec5e0155: (?generate_svf_files@PGME_PROGRAMMER@@QEAA_NPEAV?$vector@PEAVPGM_CHAIN_ELEMENT@@V?$MEM_STL_ALLOCATOR@PEAVPGM_CHAIN_ELEMENT@@@@@_Dinkum_std@@AEBVFIO_PATH@@H_NV?$basic_string@DU?$char_traits@D@_Dinkum_std@@V?$MEM_STL_ALLOCATOR@D@@@3@H@Z + 0x4565)\n\t0x7feec63a3c6: (?engage@PGME_PROGRAMMER@@QEAA_NW4PGM_PROGRAMMING_MODE@@PEAV?$vector@PEAVPGM_CHAIN_ELEMENT@@V?$MEM_STL_ALLOCATOR@PEAVPGM_CHAIN_ELEMENT@@@@@_Dinkum_std@@@Z + 0x4316)\n\t0x7fed621cbb9:\n\t 0x5da88376: (?setPriority@QThread@@QEAAXW4Priority@1@@Z + 0x3a6)\n\t 0x71f51d9e: (_endthreadex + 0x42)\n\t 0x71f51e3a: (_endthreadex + 0xde)\n\t 0x76cd652c: (BaseThreadInitThunk + 0xc)\n\t 0x76e0c520: (RtlUserThreadStart + 0x20)\n",
+		"subsystem" : "unknown",
+		"executable" : "quartus",
+		"comment" : "not_applicable"
+	},
+	"quartus" : {
+		"quartus_bits" : "64",
+		"version" : "14.0.0",
+		"build" : "200",
+		"edition" : "Full Version"
+	}
+}

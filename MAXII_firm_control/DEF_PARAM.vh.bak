@@ -1,0 +1,3 @@
+`define 	ADDR_TABL [25:1] 25'h0008000
+//`define parameter [25:1]	ADDR_TABL        =	25'h0008000;
+//`define     ADDR_FIRM_STOK  25'h0010000;

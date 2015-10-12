@@ -1,0 +1,31 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: ip-generate --project-directory=D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn --output-directory=D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl --report-file=bsf:D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl\pfl_fl.bsf --system-info=DEVICE_FAMILY="MAX II" --system-info=DEVICE=EPM2210GF256C3 --system-info=DEVICE_SPEEDGRADE=3 --component-file=D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl.qsys
+Progress: Loading MaxII_pfl_v2.5_pfl_3p_btn/pfl_fl.qsys
+Progress: Reading input file
+Progress: Adding parallel_flash_loader_0 [altera_parallel_flash_loader 14.0]
+Progress: Parameterizing module parallel_flash_loader_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: pfl_fl.pfl_fl: There are recommended upgrades for: parallel_flash_loader_0
+Info: ip-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: ip-generate --project-directory=D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn --output-directory=D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl\synthesis --file-set=QUARTUS_SYNTH --report-file=html:D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl\pfl_fl.html --report-file=sopcinfo:D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl.sopcinfo --report-file=cmp:D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl\pfl_fl.cmp --report-file=qip:D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl\synthesis\pfl_fl.qip --report-file=svd:D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl\synthesis\pfl_fl.svd --report-file=regmap:D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl\synthesis\pfl_fl.regmap --report-file=xml:D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl\pfl_fl.xml --report-file=debuginfo:D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl\synthesis\pfl_fl.debuginfo --system-info=DEVICE_FAMILY="MAX II" --system-info=DEVICE=EPM2210GF256C3 --system-info=DEVICE_SPEEDGRADE=3 --component-file=D:\Projects\MaxII_pfl_v2.5_pfl_3p_btn\pfl_fl.qsys --language=VERILOG
+Progress: Loading MaxII_pfl_v2.5_pfl_3p_btn/pfl_fl.qsys
+Progress: Reading input file
+Progress: Adding parallel_flash_loader_0 [altera_parallel_flash_loader 14.0]
+Progress: Parameterizing module parallel_flash_loader_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: pfl_fl.pfl_fl: There are recommended upgrades for: parallel_flash_loader_0
+Info: pfl_fl: Generating pfl_fl "pfl_fl" for QUARTUS_SYNTH
+Info: parallel_flash_loader_0: generating top-level entity altera_parallel_flash_loader
+Info: parallel_flash_loader_0: "pfl_fl" instantiated altera_parallel_flash_loader "parallel_flash_loader_0"
+Info: pfl_fl: Done "pfl_fl" with 2 modules, 2 files
+Info: ip-generate succeeded.
+Info: Finished: Create HDL design files for synthesis
